@@ -1,26 +1,38 @@
 "use client"
 
 import * as React from "react"
-import { Box, Button, Flex, Section, Separator, Text, TextField, Theme } from "@radix-ui/themes"
-import { Menu, Folder, SettingsIcon } from "lucide-react"
-import { Dialog } from "radix-ui"
+import { Box, Button, Card, Flex, Section, Separator, Text, TextField, Theme } from "@radix-ui/themes"
+import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp, File, FileIcon } from "lucide-react"
+import { TypeIcon } from "../TypeIcon"
+import { Collapsible, Dialog } from "radix-ui"
 import { Container, root } from "postcss"
 import { Row } from "@radix-ui/themes/src/components/table.jsx"
 import { useTransition, animated, config } from "react-spring";
+import { fileSystem, MemFolder } from "@/utils/files"
 
 export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 	const [open, setOpen] = React.useState(false)	
 	const [container, setContainer] = React.useState(null);
 	const transitions = useTransition(open, {
-		from: { opacity: 1, x: -80 },
-		enter: { opacity: 1, x: 80 },
-		leave: { opacity: 0, x: -80 },
+		from: { opacity: 1, x: 0 },
+		enter: { opacity: 1, x: 0 },
+		leave: { opacity: 0, x: 0 },
 		config: config.default,
 	});
 
+	var foldersOpened: { 
+		[folderName: string]: [
+			open:boolean,
+			setOpen: React.Dispatch<React.SetStateAction<boolean>>
+		]  
+	} = {}
+	const stateForFolder = (folder: MemFolder)=>{
+		foldersOpened[folder.name] = React.useState(false)
+		folder.childFolders.forEach(stateForFolder);
+	}
+	stateForFolder(fileSystem)
 	const BarElement = () => (
-		<Flex align="center" direction="column" >
-			<Flex direction={"column"} justify="start" height="100%" p="4" gap="4">
+			<Flex direction={"column"} justify="start" height="100%" width="80px"p="4" gap="4">
 				<Button // style={{background: "var(--accentColor)"}}
 					variant="ghost" onClick={()=>setOpen(!open)}
 				>
@@ -40,17 +52,86 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 					</Button>
 				</Flex>
 			</Flex>
-		</Flex>
 	)
+	const FolderPanel = (folderName: string, open:boolean)=> {
+		return (
+			<Flex gap="2">
+				<Folder/>
+				<Text> {folderName} </Text>
+				{open ? <ArrowDown /> : <ArrowUp />}
+			</Flex>
+		)
+	}
+	const MenuFile = (fileName: string, type:string) => {
+		return (
+			<Flex gap="2">
+				<div/>
+				{TypeIcon(type)}
+				<Text> {fileName} </Text>
+			</Flex>
+		)
+	}
+	const MenuFolder = (folder: MemFolder) => {	
+		var subFolders: any[] = []
+		var subFiles: any[] = []
+		folder.childFolders.forEach(element => {
+			subFolders.push(MenuFolder(element))
+		});	
+		folder.childDatafiles.forEach(element => {
+			console.log(element)
+			subFiles.push(MenuFile(element.name,element.type))
+		})
+		return (
+			<>
+				<Collapsible.Root
+					className="CollapsibleRoot"
+					open={foldersOpened[folder.name][0]}
+					onOpenChange={foldersOpened[folder.name][1]}
+				>
+				<Box p="3" width="100%">
+					<Card  variant="surface">
+
+					<div
+						style={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "space-between",
+						}}
+					>
+						<Collapsible.Trigger asChild>
+							<button className="IconButton">
+								{FolderPanel(folder.name, foldersOpened[folder.name][0])}
+							</button>
+						</Collapsible.Trigger>
+					</div>
+
+					<Collapsible.Content>
+						<Flex direction="column">
+							{
+								subFolders
+							}
+							{
+								subFiles
+							}
+						</Flex>
+					</Collapsible.Content>
+					</Card>
+				</Box>
+				</Collapsible.Root>
+			</>
+		)
+	}
 	const MenuElement = () =>(
-		<Flex height="100%" width="400px"  
-		align="center" direction="column">
-			<Text>AWD</Text>
-			<Separator/>
-			<Section/>			
-			<Separator/>
-			<Text>AWD</Text>
-		</Flex>
+		<Box height="100%" width="400px"
+		//style={{background: "var(--gray-surface)"}}
+		>
+			<Flex
+			align="start" direction="column">
+				<>
+					{MenuFolder(fileSystem)}
+				</>
+			</Flex>
+		</Box>
 	)
 	//if(open){
 	//	return (<Open/>)
@@ -58,19 +139,22 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 	//return (<Closed/>)
 	return (		
 		<Box //onMouseOver={() => setOpen(true)}
-			height="100%" width={!open ? "80px": "480px"}
+			height="100%" width={!open ? "80px": "500px"}
 			style={{background: "var(--gray-surface)"}}>
-			<Flex align="center" direction="row">
+			<Flex gap="0">
 				<BarElement/>
-				{transitions((styles, item) =>
-					item ? (
-						<>
-							<animated.div style={styles}>
-								<MenuElement/>
-							</animated.div>
-						</>
-					) : null,
-				)}
+				{
+					transitions((styles, item) =>
+						item ? (
+							<div>
+								<Section height="230px"/>
+								<animated.div style={styles}>
+									<MenuElement/>
+								</animated.div>
+							</div>
+						) : null,
+					)
+				}
 			</Flex>
 		</Box>	
 	)
