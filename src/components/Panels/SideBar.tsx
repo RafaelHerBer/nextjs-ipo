@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Box, Button, Card, Flex, Section, Separator, Text, TextField, Theme } from "@radix-ui/themes"
+import { Box, Button, Card, Flex, Link, Section, Separator, Text, TextField, Theme } from "@radix-ui/themes"
 import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp, File, FileIcon } from "lucide-react"
 import { TypeIcon } from "../TypeIcon"
 import { Collapsible, Dialog } from "radix-ui"
@@ -53,7 +53,7 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 				</Flex>
 			</Flex>
 	)
-	const FolderPanel = (folderName: string, open:boolean)=> {
+	const FolderPanel = (folderName: string, open:boolean,  path:string)=> {
 		return (
 			<Flex gap="2">
 				<Folder/>
@@ -62,24 +62,26 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 			</Flex>
 		)
 	}
-	const MenuFile = (fileName: string, type:string) => {
+	const MenuFile = (fileName: string, type:string, path:string) => {
 		return (
-			<Flex gap="2">
-				<div/>
-				{TypeIcon(type)}
-				<Text> {fileName} </Text>
-			</Flex>
+			<Link href={path+fileName} weight="medium">
+				<Flex gap="2">
+					<div/>
+					{TypeIcon(type)}
+					<Text> {fileName} </Text>
+				</Flex>
+			</Link>
 		)
 	}
-	const MenuFolder = (folder: MemFolder) => {	
+	const MenuFolder = (folder: MemFolder,  path:string) => {	
 		var subFolders: any[] = []
 		var subFiles: any[] = []
 		folder.childFolders.forEach(element => {
-			subFolders.push(MenuFolder(element))
+			subFolders.push(MenuFolder(element, path+folder.name+"/"))
 		});	
 		folder.childDatafiles.forEach(element => {
 			console.log(element)
-			subFiles.push(MenuFile(element.name,element.type))
+			subFiles.push(MenuFile(element.name,element.type, path+folder.name+"/"))
 		})
 		return (
 			<>
@@ -100,7 +102,7 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 					>
 						<Collapsible.Trigger asChild>
 							<button className="IconButton">
-								{FolderPanel(folder.name, foldersOpened[folder.name][0])}
+								{FolderPanel(folder.name, foldersOpened[folder.name][0], path+folder.name+"/")}
 							</button>
 						</Collapsible.Trigger>
 					</div>
@@ -128,7 +130,7 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 			<Flex
 			align="start" direction="column">
 				<>
-					{MenuFolder(fileSystem)}
+					{MenuFolder(fileSystem, "/")}
 				</>
 			</Flex>
 		</Box>
