@@ -1,4 +1,4 @@
-
+"use client"
 interface MemFile {
     name:string ;
     date: Date
@@ -51,4 +51,18 @@ var defaultSubFolder: MemFolder = new MemFolder("Subcarpeta por defecto");
 defaultSubFolder.childDatafiles.push(defaultMemory);
 defaultFolder.childFolders.push(defaultSubFolder);
 defaultFolder.childDatafiles.push(defaultDocument);
-export var fileSystem: MemFolder = new MemFolder("Mis Archivos", [defaultFolder]);
+export var DefaultFilesystem: MemFolder = new MemFolder("Mis Archivos", [defaultFolder]);
+export const getFileSystem = () => {
+	var fileSystem: MemFolder;
+    if(typeof window !== 'undefined'){
+    	var local = localStorage.getItem("fileSystem")
+    	if (local){
+    		fileSystem = JSON.parse(local);
+    	}else{
+    		fileSystem = DefaultFilesystem
+    		localStorage.setItem("fileSystem", JSON.stringify(DefaultFilesystem))
+    	}
+        return fileSystem
+    }
+    return DefaultFilesystem
+}

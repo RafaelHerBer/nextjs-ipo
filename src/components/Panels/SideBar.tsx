@@ -3,14 +3,14 @@
 import * as React from "react"
 import { Box, Button, Card, Flex, Link, Section, Separator, Text, TextField, Theme } from "@radix-ui/themes"
 import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp, File, FileIcon } from "lucide-react"
-import { TypeIcon } from "../TypeIcon"
+import { SmallTypeIcon } from "../TypeIcon"
 import { Collapsible, Dialog } from "radix-ui"
 import { Container, root } from "postcss"
 import { Row } from "@radix-ui/themes/src/components/table.jsx"
 import { useTransition, animated, config } from "react-spring";
-import { fileSystem, MemFolder } from "@/utils/files"
+import { DefaultFilesystem, getFileSystem, MemFolder } from "@/utils/files"
 
-export const SideBar = ({ children }: { children: React.ReactNode }) =>{
+export const SideBar = () =>{
 	const [open, setOpen] = React.useState(false)	
 	const [container, setContainer] = React.useState(null);
 	const transitions = useTransition(open, {
@@ -30,6 +30,7 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 		foldersOpened[folder.name] = React.useState(false)
 		folder.childFolders.forEach(stateForFolder);
 	}
+	let fileSystem = getFileSystem()
 	stateForFolder(fileSystem)
 	const BarElement = () => (
 			<Flex direction={"column"} justify="start" height="100%" width="80px"p="4" gap="4">
@@ -64,10 +65,10 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 	}
 	const MenuFile = (fileName: string, type:string, path:string) => {
 		return (
-			<Link href={path+fileName} weight="medium">
+			<Link href={path+fileName} weight="medium" key={"menufile.Link"+path}>
 				<Flex gap="2">
 					<div/>
-					{TypeIcon(type)}
+					{SmallTypeIcon(type)}
 					<Text> {fileName} </Text>
 				</Flex>
 			</Link>
@@ -80,15 +81,14 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 			subFolders.push(MenuFolder(element, path+folder.name+"/"))
 		});	
 		folder.childDatafiles.forEach(element => {
-			console.log(element)
 			subFiles.push(MenuFile(element.name,element.type, path+folder.name+"/"))
 		})
 		return (
-			<>
 				<Collapsible.Root
 					className="CollapsibleRoot"
 					open={foldersOpened[folder.name][0]}
 					onOpenChange={foldersOpened[folder.name][1]}
+					key={"menufolder.collapsible.root"+path}
 				>
 				<Box p="3" width="100%">
 					<Card  variant="surface">
@@ -120,7 +120,6 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 					</Card>
 				</Box>
 				</Collapsible.Root>
-			</>
 		)
 	}
 	const MenuElement = () =>(
@@ -142,7 +141,7 @@ export const SideBar = ({ children }: { children: React.ReactNode }) =>{
 	return (		
 		<Box //onMouseOver={() => setOpen(true)}
 			height="100%" width={!open ? "80px": "500px"}
-			style={{background: "var(--gray-surface)"}}>
+			style={{background: "var(--gray-surface)", border: "1px solid var(--gray-5)"}}>
 			<Flex gap="0">
 				<BarElement/>
 				{
