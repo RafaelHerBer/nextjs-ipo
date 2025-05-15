@@ -1,13 +1,13 @@
 "use client"
-import { Box, Flex, Separator, Text, Card, Button, DropdownMenu } from "@radix-ui/themes"
+import { Box, Flex, Separator, Text, Card, Button, DropdownMenu, AlertDialog } from "@radix-ui/themes"
 import * as NativeContextMenu from "@radix-ui/react-context-menu"
 import * as NativeDropdownMenu from "@radix-ui/react-dropdown-menu"
 import { ContextMenu } from "@radix-ui/themes"
-import { addFile, MemDocument, MemFileSystem, MemFolder, MemMemory } from "@/utils/files"
+import { addFile, deleteFile, MemDocument, MemFile, MemFileSystem, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
 import { FileCard, FolderCard } from "../FileCards"
 import { BrainIcon, FileIcon, FolderIcon, Pencil } from "lucide-react"
 import React from "react"
-import { FileCreationDialog } from "../UtilityDialog"
+import { ConfirmationDialog, FileCreationDialog } from "../UtilityDialog"
 
 type FolderViewDysplayProps = {
     folder: MemFolder
@@ -46,7 +46,7 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
             <ContextMenu.Item onClick={()=>rename()}><Pencil/>Rename</ContextMenu.Item>
             <ContextMenu.Separator />
             <ContextMenu.Item onClick={()=>deleteFile()} color="red">
-                Delete
+                Delete + {folder.name}
             </ContextMenu.Item>
         </Card>
         )
@@ -66,8 +66,8 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
             <ContextMenu.Item onClick={()=>setDocDialogOpen(true)}><FileIcon/>New Documento</ContextMenu.Item>
             <ContextMenu.Item onClick={()=>setMemDialogOpen(true)}><BrainIcon/>New Memoria</ContextMenu.Item>
             <ContextMenu.Separator />
-            <ContextMenu.Item color="red">
-                Delete
+            <ContextMenu.Item color="red" onClick={()=>setDelDialogOpen(true)}>
+                Delete "{folder.name}"
             </ContextMenu.Item>
         </Card>
         )
@@ -75,7 +75,7 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
     const [folderDialogOpen, setFolderDialogOpen] = React.useState(false)	
     const [docDialogOpen, setDocDialogOpen] = React.useState(false)	
     const [memDialogOpen, setMemDialogOpen] = React.useState(false)	
-
+    const [delDialogOpen, setDelDialogOpen] = React.useState(false)	
     const DDMenuItems = ()=>{
         return(
             <Card>
@@ -83,8 +83,8 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
                 <DropdownMenu.Item onClick={()=>setDocDialogOpen(true)}><FileIcon/>New Documento</DropdownMenu.Item>
                 <DropdownMenu.Item onClick={()=>setMemDialogOpen(true)}><BrainIcon/>New Memoria</DropdownMenu.Item>
             
-	            <DropdownMenu.Item color="red">
-	            	Delete
+	            <DropdownMenu.Item color="red" onClick={()=>setDelDialogOpen(true)}>
+	            	Delete "{folder.name}"
 	            </DropdownMenu.Item>
             </Card>
         )
@@ -135,6 +135,11 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
             open={memDialogOpen} setOpen={setMemDialogOpen} 
             create={createMemory} parentFolder={folder}
         />
+        <ConfirmationDialog actionString="Delete Folder" open={delDialogOpen} setOpen={setDelDialogOpen}
+        action={()=>{
+            deleteFile(folder)
+            window.location.href = "/Mis Archivos"
+            }} cancelAction={()=>{}}/>
         <Box position="fixed"
             bottom="40px" right="40px">
             <DropdownMenu.Root>

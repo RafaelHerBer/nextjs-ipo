@@ -54,14 +54,33 @@ export class MemMemory implements MemDatafile{
         this.description = description
     }
 }
-export const saveFileSystem = (fileSystem:{rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string}} })=>{
+export const saveFileSystem = (fileSystem:{rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string, parentId: string|undefined}} })=>{
     if(typeof window !== "undefined"){
         window.localStorage.setItem("rootfolder", JSON.stringify(fileSystem.rootFolder))
         window.localStorage.setItem("filelist", JSON.stringify(fileSystem.fileList))
     }
 }
+export const deleteFile = (file: MemFile)=>{
+    const fileSystem = getFileSystem()
+    console.log("deleting",file)
+    var entry=fileSystem.fileList[file.id]
+    if(!entry.parentId){
+     
+        return
+    }
+    var parent = fileSystem.fileList[entry.parentId].file as MemFolder
+    parent.childFolders.forEach( (elem,indx)=>{
+        if(elem.id == file.id)parent.childFolders.splice(indx,1);
+    })
+    for(var key in fileSystem.fileList){
+        if(fileSystem.fileList[key].parentId == file.id)
+            deleteFile(fileSystem.fileList[key].file)
+    }
+    delete fileSystem.fileList[file.id]
+    saveFileSystem(fileSystem)
+}
 export const addFile = (file:MemFile, parent:MemFolder,
-    fileSystem?:{rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string}} }, notSave?:void)=>
+    fileSystem?:{rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string, parentId: string|undefined}} }, notSave?:void)=>
 {
     if(!fileSystem){
         fileSystem=getFileSystem();
@@ -72,7 +91,7 @@ export const addFile = (file:MemFile, parent:MemFolder,
         console.log("isDataFile",dataFile)
         parent.childDatafiles.push(dataFile)
         var path = fileSystem.fileList[parent.id].path + "/" + dataFile.name
-        fileSystem.fileList[file.id]={file:dataFile,path:path};
+        fileSystem.fileList[file.id]={file:dataFile,path:path,parentId:parent.id};
         if(!notSave){
             saveFileSystem(fileSystem);
             console.log("Saving to cookie")
@@ -83,7 +102,7 @@ export const addFile = (file:MemFile, parent:MemFolder,
     if(file.fileType=="folder"){
         parent.childFolders.push(folder)
         var path = fileSystem.fileList[parent.id].path + "/" + folder.name
-        fileSystem.fileList[file.id]={file:folder,path:path};
+        fileSystem.fileList[file.id]={file:folder,path:path,parentId:parent.id};
         if(!notSave){
             saveFileSystem(fileSystem);
             console.log("Saving to cookie")
@@ -92,11 +111,11 @@ export const addFile = (file:MemFile, parent:MemFolder,
     }
     throw new Error("File not valid error");
 }
-export type MemFileSystem = {rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string}} }
+export type MemFileSystem = {rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string, parentId: string|undefined}} }
 export const getDefaultFileSystem = ()=>{
-    var DefaultFileList: {[id: string]: {file:MemFile,path:string}} = {}
+    var DefaultFileList: {[id: string]: {file:MemFile,path:string, parentId: string|undefined}} = {}
     var DefaultRootFolder: MemFolder = new MemFolder("Mis Archivos");
-    DefaultFileList[DefaultRootFolder.id]={file:DefaultRootFolder,path:"Mis Archivos"}
+    DefaultFileList[DefaultRootFolder.id]={file:DefaultRootFolder,path:"Mis Archivos", parentId:undefined}
     var DefaultFileSystem = {rootFolder: DefaultRootFolder, fileList:DefaultFileList}
 
     var defaultFolder: MemFolder = new MemFolder("Carpeta por defecto");
@@ -110,9 +129,9 @@ export const getDefaultFileSystem = ()=>{
     addFile(defaultMemory, defaultSubFolder, DefaultFileSystem, )
     return DefaultFileSystem
 }
-export const getFileSystem:()=>{rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string}} }  = () => {
+export const getFileSystem:()=>{rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string, parentId: string|undefined}} }  = () => {
 	var rootFolder: MemFolder | undefined;
-    var fileList: {[id: string]: {file:MemFile,path:string}} = {}
+    var fileList: {[id: string]: {file:MemFile,path:string, parentId: string|undefined}} = {}
     if(typeof window !== "undefined"){
         let cookieRootFolder = window.localStorage.getItem("rootfolder")
         let cookieFileList = window.localStorage.getItem("filelist")

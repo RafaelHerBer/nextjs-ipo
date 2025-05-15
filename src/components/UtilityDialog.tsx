@@ -63,6 +63,7 @@ export const ConfirmationDialog:React.FC<ConfirmationDialogProps> = ({actionStri
     <Dialog.Root open={open}>	
         <Dialog.Content maxWidth="450px" onInteractOutside={()=>setOpen(false)}>
             <Dialog.Title>Are you sure you want to {actionString}?</Dialog.Title>
+            <Dialog.Description></Dialog.Description>
             <Flex gap="3" mt="4" justify="end">
                 <Dialog.Close>
                     <Button variant="soft" color="gray"
