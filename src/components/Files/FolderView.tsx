@@ -1,10 +1,11 @@
 "use client"
-import { Box, Flex, Separator, Text, Container, Card, Dialog, TextField, Button } from "@radix-ui/themes"
+import { Box, Flex, Separator, Text, Container, Card, Dialog, TextField, Button, DropdownMenu } from "@radix-ui/themes"
 import * as NativeContextMenu from "@radix-ui/react-context-menu"
+import * as NativeDropdownMenu from "@radix-ui/react-dropdown-menu"
 import { ContextMenu } from "@radix-ui/themes"
 import { MemDocument, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
 import { FileCard, FolderCard } from "../FileCards"
-import { BrainIcon, FileIcon, FolderIcon, Plus } from "lucide-react"
+import { BrainIcon, FileIcon, FolderIcon, Pencil, Plus } from "lucide-react"
 import React from "react"
 import { FileCreationDialog } from "../UtilityDialog"
 
@@ -26,6 +27,22 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
                 date={subFolder.date}/>
         )
     })
+
+    type CMFileProps = {
+        deleteFile: ()=>void
+        rename: ()=>void
+    }
+    const CMFile:React.FC<CMFileProps> = ({deleteFile,rename})=>{
+        return(
+        <Card>
+            <ContextMenu.Item onClick={()=>rename()}><Pencil/>Rename</ContextMenu.Item>
+            <ContextMenu.Separator />
+            <ContextMenu.Item onClick={()=>deleteFile()} color="red">
+                Delete
+            </ContextMenu.Item>
+        </Card>
+        )
+    }
     var filesComponents = subFiles.map((subFile)=>{
         console.log("Subfiles",subFile.name)
         return (
@@ -36,21 +53,34 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
     })
     const CMOpenSpace = ()=>{
         return(
-        <>
+        <Card>
             <ContextMenu.Item onClick={()=>setFolderDialogOpen(true)}><FolderIcon/>New Folder</ContextMenu.Item>
-            <ContextMenu.Item onClick={()=>setDocDialogOpen(true)}><FileIcon/> Documento</ContextMenu.Item>
-            <ContextMenu.Item onClick={()=>setMemDialogOpen(true)}><BrainIcon/> Memoria</ContextMenu.Item>
+            <ContextMenu.Item onClick={()=>setDocDialogOpen(true)}><FileIcon/>New Documento</ContextMenu.Item>
+            <ContextMenu.Item onClick={()=>setMemDialogOpen(true)}><BrainIcon/>New Memoria</ContextMenu.Item>
             <ContextMenu.Separator />
             <ContextMenu.Item color="red">
                 Delete
             </ContextMenu.Item>
-        </>
+        </Card>
         )
     }
     const [folderDialogOpen, setFolderDialogOpen] = React.useState(false)	
     const [docDialogOpen, setDocDialogOpen] = React.useState(false)	
     const [memDialogOpen, setMemDialogOpen] = React.useState(false)	
 
+    const DDMenuItems = ()=>{
+        return(
+            <Card>
+                <DropdownMenu.Item onClick={()=>setFolderDialogOpen(true)}><FolderIcon/>New Folder</DropdownMenu.Item>
+                <DropdownMenu.Item onClick={()=>setDocDialogOpen(true)}><FileIcon/>New Documento</DropdownMenu.Item>
+                <DropdownMenu.Item onClick={()=>setMemDialogOpen(true)}><BrainIcon/>New Memoria</DropdownMenu.Item>
+            
+	            <DropdownMenu.Item color="red">
+	            	Delete
+	            </DropdownMenu.Item>
+            </Card>
+        )
+    }
     const createFolder = (name:string, parentFolder:MemFolder)=>{
         let newFolder = new MemFolder(name);
         parentFolder.childFolders.push(newFolder);
@@ -65,7 +95,6 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
         let newMem = new MemMemory(name,"");
         parentFolder.childDatafiles.push(newMem);
         saveFileSystem(fileSystem);
-
     }
     return(
         <ContextMenu.Root>
@@ -101,10 +130,22 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
             open={memDialogOpen} setOpen={setMemDialogOpen} 
             create={createMemory} parentFolder={folder}
         />
+        <Box position="fixed"
+            bottom="40px" right="40px">
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <Button variant="soft" size="4">
+                        Opciones
+                        <DropdownMenu.TriggerIcon />
+                    </Button>
+                </DropdownMenu.Trigger>
+                <NativeDropdownMenu.Content>
+                    <DDMenuItems/>
+                </NativeDropdownMenu.Content>
+            </DropdownMenu.Root>
+        </Box>
 		<NativeContextMenu.Content>
-            <Card >
-			    <CMOpenSpace/>
-            </Card>
+			<CMOpenSpace/>
 		</NativeContextMenu.Content>
 	    </ContextMenu.Root>
     )

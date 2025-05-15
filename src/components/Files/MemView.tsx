@@ -43,11 +43,33 @@ export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem}
         </>
         )
     }
+    const DDMenuItems = ()=>{
+        return(
+            <Card>
+	            <DropdownMenu.Item onClick={()=>{
+                        setEdit(!edit);
+                        if(edit){
+                            setOpenDialog(true)
+                        }
+                    }}>
+                    {edit?"Save Memory":"Edit"}
+                    <PencilIcon size="16"/>
+                </DropdownMenu.Item>
+	            <DropdownMenu.Item onClick={()=>{
+                    setOpenInterface(true);memory.date=new Date();
+                    setDescription("Descripción Por defecto");
+                    saveMemory();
+                }}>Scan Memory <BrainIcon size="16"/><ArrowDownIcon size="16"/></DropdownMenu.Item>
+	            <DropdownMenu.Item onClick={()=>setOpenInterface(true)}>Remember Memory <BrainIcon size="16"/><ArrowUpIcon size="16"/></DropdownMenu.Item>
+                <DropdownMenu.Separator />
+	            <DropdownMenu.Item color="red">
+	            	Delete
+	            </DropdownMenu.Item>
+            </Card>
+        )
+    }
     var actualDate = new Date(memory.date)
     var dateString = actualDate.getDate()+"/"+actualDate.getMonth()+"/"+actualDate.getFullYear()
-    const scanMemory = ()=>{
-
-    }
 
     return(
         <ContextMenu.Root>
@@ -73,33 +95,13 @@ export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem}
             bottom="40px" right="40px">
                 <DropdownMenu.Root>
 	                <DropdownMenu.Trigger>
-	                	<Button variant="soft">
+	                	<Button variant="soft" size="4">
 	                		Options
 	                		<DropdownMenu.TriggerIcon />
 	                	</Button>
 	                </DropdownMenu.Trigger>
 	                <NativeDropdownMenu.Content>
-                        <Card>
-	                	    <DropdownMenu.Item onClick={()=>{
-                                    setEdit(!edit);
-                                    if(edit){
-                                        setOpenDialog(true)
-                                    }
-                                }}>
-                                {edit?"Save Memory":"Edit"}
-                                <PencilIcon size="16"/>
-                            </DropdownMenu.Item>
-	                	<DropdownMenu.Item onClick={()=>{
-                            setOpenInterface(true);memory.date=new Date();
-                            setDescription("Descripción Por defecto");
-                            saveMemory();
-                        }}>Scan Memory <BrainIcon size="16"/><ArrowDownIcon size="16"/></DropdownMenu.Item>
-	                	<DropdownMenu.Item onClick={()=>setOpenInterface(true)}>Remember Memory <BrainIcon size="16"/><ArrowUpIcon size="16"/></DropdownMenu.Item>
-                        <DropdownMenu.Separator />
-	                	<DropdownMenu.Item color="red">
-	                		Delete
-	                	</DropdownMenu.Item>
-                        </Card>
+                        <DDMenuItems/>
 	                </NativeDropdownMenu.Content>
                 </DropdownMenu.Root>
         </Box>

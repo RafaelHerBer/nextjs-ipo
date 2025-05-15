@@ -63,7 +63,7 @@ export const DocView:React.FC<DocViewDysplayProps> = ({document, path, fileSyste
             cancelAction={()=>{setContent(document.content)}} open={openDialog} setOpen={setOpenDialog}/>
 		<Box position="fixed"
             bottom="40px" right="40px">
-            <Button size="3" variant="surface" onClick={()=>{
+            <Button size="4" variant="soft" onClick={()=>{
                     setEdit(!edit);
                     if(edit){
                         setOpenDialog(true)
