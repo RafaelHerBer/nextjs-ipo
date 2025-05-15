@@ -33,7 +33,10 @@ export const SmallTypeIcon = (type: string) => {
     }
 }
 
-export const TypeIcon = (type: string) => {
+type TypeIconProps = {
+    type: string
+}
+export const TypeIcon:React.FC<TypeIconProps> = ({type}) => {
     switch(type){
         case "Memory":
             return(

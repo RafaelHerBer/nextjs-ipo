@@ -1,21 +1,30 @@
+"use client"
 import { Box, Card, Link, Text, Grid, Flex } from "@radix-ui/themes"
 import { FileIcon, FolderIcon } from "lucide-react"
 import { TypeIcon } from "./TypeIcon"
-
-export const FolderCard = (name:string, fullPath:string, date:Date)=>{
+type FolderCardProps = {
+    folderName:string, fullPath:string, date:Date
+}
+export const FolderCard:React.FC<FolderCardProps > = ({folderName, fullPath, date})=>{
+    var actualDate = new Date(date)
+    var dateString = actualDate.getDate()+"/"+actualDate.getMonth()+"/"+actualDate.getFullYear()
     return (
-        <Box width="300px" height="100px" p="4">
+        <Box width="300px" 
+            p="4">
             <Card variant="surface" asChild>
                 <Link href={fullPath}>
                     <Flex direction="column"
-                        width="300px" height="100px">
-                        <Box width="300px" height="50px" p="2" px="4">
-                            <Text size={"8"}>{name}</Text>
+                        //width="300px" height="100px"
+                        >
+                        <Box //width="280px" height="50px"
+                            p="2" px="4">
+                            <Text size={"6"}>{folderName}</Text>
                         </Box>
-                        <Flex direction="row" height="50px" align="end" gap="9">
+                        <Flex direction="row" //height="50px"
+                        align="end" gap="9">
                             <FolderIcon size="24px"/>
                             <div/>
-                            <Text>{date.toLocaleDateString()}</Text>
+                            <Text>{dateString}</Text>
                         </Flex>
                     </Flex>
                 </Link>
@@ -23,21 +32,23 @@ export const FolderCard = (name:string, fullPath:string, date:Date)=>{
         </Box>
     )
 }
-export const FileCard = (name:string, type:string, fullPath:string, date:Date)=>{
+type FileCardProps = {
+    fileName:string, type:string, fullPath:string, date:Date
+}
+export const FileCard:React.FC<FileCardProps> = ({fileName, type, fullPath, date})=>{
+    var actualDate = new Date(date)
+    var dateString = actualDate.getDate()+"/"+actualDate.getMonth()+"/"+actualDate.getFullYear()
     return (
-        <Box width="200px" height="100px" p="4">
+        <Box width="200px" p="4">
             <Card variant="surface" asChild>
                 <Link href={fullPath}>
-                    <Flex direction="column"
-                        width="200px" height="100px">
-                        <Box width="200px" height="50px" p="2" px="4">
-                            <Text size={"6"}>{name}</Text>
+                    <Flex direction="column">
+                        <Box p="2" px="4">
+                            <Text size={"5"}>{fileName}</Text>
                         </Box>
-                        <Flex direction="row" height="50px" align="end" gap="9">
-                            {
-                                TypeIcon(type)
-                            }
-                            <Text>{date.toLocaleDateString()}</Text>
+                        <Flex direction="row" align="end" gap="9">
+                            <TypeIcon type={type}/>
+                            <Text>{dateString}</Text>
                         </Flex>
                     </Flex>
                 </Link>

@@ -1,11 +1,13 @@
 "use client"
-interface MemFile {
+export interface MemFile {
     name:string ;
-    date: Date
+    date: Date;
+    readonly fileType: string;
 }
 export class MemFolder implements MemFile{
     public name: string;
     public date: Date = new Date()
+    public fileType: string = "Folder"
     public childFolders: MemFolder[]
     public childDatafiles: MemDatafile[] = []
     constructor (name:string, folders?: MemFolder[]){
@@ -17,13 +19,13 @@ export class MemFolder implements MemFile{
         }
     }
 }
-interface MemDatafile extends MemFile{
-    name: string;
-    type: string;
+export interface MemDatafile extends MemFile{
+    readonly type: string;
 }
 export class MemDocument implements MemDatafile{
     name: string;
     public date: Date = new Date();
+    readonly fileType: string = "Datafile"
 
     readonly type = "Document";
     content: string;
@@ -36,6 +38,8 @@ export class MemDocument implements MemDatafile{
 export class MemMemory implements MemDatafile{
     name: string;
     public date: Date = new Date();
+
+    readonly fileType: string = "Datafile"
 
     readonly type = "Memory";
     description: string;
@@ -65,4 +69,11 @@ export const getFileSystem = () => {
         return fileSystem
     }
     return DefaultFilesystem
+}
+export const saveFileSystem = (fileSystem:MemFile)=>{
+    if(typeof window !== 'undefined'){
+        fileSystem.name = "Mis Archivos"
+    	var local = localStorage.setItem("fileSystem", JSON.stringify(fileSystem))
+
+    }
 }
