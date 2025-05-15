@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Box, Button, Card, Flex, Link, Section, Text } from "@radix-ui/themes"
-import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp } from "lucide-react"
+import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp, LinkedinIcon } from "lucide-react"
 import { SmallTypeIcon } from "../TypeIcon"
 import { Collapsible } from "radix-ui"
 import { useTransition, animated, config } from "react-spring";
@@ -43,9 +43,11 @@ export const SideBar = () =>{
 				<Section size="4"/>
 				<Flex direction={"column"}  gap="5">
 					<Button // style={{background: "var(--accentColor)"}}
-						variant="ghost" onClick={()=>setOpen(true)}
-					>
-						<Folder size="32px"/>
+						variant="ghost" //onClick={()=>setOpen(true)}
+					asChild>
+						<Link href="/Mis Archivos">
+							<Folder size="32px"/>
+						</Link>
 					</Button>
 					<Button // style={{background: "var(--accentColor)"}}
 						variant="ghost" onClick={()=>setOpen(true)}
@@ -55,12 +57,19 @@ export const SideBar = () =>{
 				</Flex>
 			</Flex>
 	)
-	const FolderPanel = (folderName: string, open:boolean,  path:string)=> {
+	const FolderPanel = (folderName: string, open:boolean,
+		setOpen:React.Dispatch<React.SetStateAction<boolean>>,  path:string)=> {
 		return (
 			<Flex gap="2">
-				<Folder/>
-				<Text> {folderName} </Text>
-				{open ? <ArrowDown /> : <ArrowUp />}
+				<Link  href={path} color="gold">
+					<Flex gap="2">
+							<Folder/>
+							<Text> {folderName} </Text>
+					</Flex>
+				</Link>
+				<Button onClick={()=>setOpen(!open)} variant="outline" size="1">
+					{open ? <ArrowDown /> : <ArrowUp />}
+				</Button>
 			</Flex>
 		)
 	}
@@ -102,11 +111,11 @@ export const SideBar = () =>{
 							justifyContent: "space-between",
 						}}
 					>
-						<Collapsible.Trigger asChild>
-							<button className="IconButton">
-								{FolderPanel(folder.name, foldersOpened[folder.name][0], path+folder.name+"/")}
-							</button>
-						</Collapsible.Trigger>
+						
+						<div className="IconButton">
+							{FolderPanel(folder.name, foldersOpened[folder.name][0],
+								foldersOpened[folder.name][1], path+folder.name+"/")}
+						</div>
 					</div>
 
 					<Collapsible.Content>
