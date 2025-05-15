@@ -2,8 +2,8 @@
 import { SmallTypeIcon, TypeIcon } from "@/components/TypeIcon";
 import { FileCreationDialog } from "@/components/UtilityDialog";
 import { getFileSystem, MemDocument, MemFolder, MemMemory, saveFileSystem } from "@/utils/files";
-import { Box, Button, Card, Flex, Section, Text, Separator, Link } from "@radix-ui/themes";
-import { Pencil, File, Brain, Folder, ArrowUpRightSquare, ArrowUpRightFromSquareIcon } from "lucide-react";
+import { Box, Button, Card, Flex, Section, Text, Separator, Link, Container, HoverCard, Heading } from "@radix-ui/themes";
+import { Pencil, File, Brain, Folder, ArrowUpRightSquare, ArrowUpRightFromSquareIcon, BrainIcon } from "lucide-react";
 import React from "react";
 import { redirect } from "next/navigation";
 const Page = () => {
@@ -42,9 +42,9 @@ const Page = () => {
   }
   var fileSystem = getFileSystem()
   var recentFiles = [
-    RecentFile("Carpeta por defecto","Folder","/Mis Archivos/Carpeta por defecto"),
-    RecentFile("Archivo por defecto","Document","/Mis Archivos/Carpeta por defecto/Documento por defecto"),
-    RecentFile("Memoria por defecto","Memory","/Mis Archivos/Carpeta por defecto/SubCarpeta por defecto/Memoria por defecto"),
+    RecentFile("Carpeta por defecto","folder","/Mis Archivos/Carpeta por defecto"),
+    RecentFile("Archivo por defecto","document","/Mis Archivos/Carpeta por defecto/Documento por defecto"),
+    RecentFile("Memoria por defecto","memory","/Mis Archivos/Carpeta por defecto/SubCarpeta por defecto/Memoria por defecto"),
   ]
   const [docDialogOpen, setDocDialogOpen] = React.useState(false)	
   const [memDialogOpen, setMemDialogOpen] = React.useState(false)	
@@ -61,20 +61,21 @@ const Page = () => {
       redirect("/Mis Archivos/"+name)
   }
   return (
-    <Box width="100%" height="100%">
-      <Flex direction="column" width="35%">
+    <Container size="4" width="100%" height="100%">
+      <Flex direction="row" gap="9">
+      <Flex direction="column" width="60%">
         <Flex direction="column" p="9">
           <Text size="7"> Quick Actions </Text>
           <Flex direction="column" width="60%"gap="2" p="6">
             <CreateDocButton/>
             <CreateMemButton/>
-            <FileCreationDialog type="Document"
+            <FileCreationDialog type="document"
                 open={docDialogOpen} setOpen={setDocDialogOpen} 
-                create={createDocument} parentFolder={fileSystem}
+                create={createDocument} parentFolder={fileSystem.rootFolder}
             />
-            <FileCreationDialog type="Memory"
+            <FileCreationDialog type="memory"
                 open={memDialogOpen} setOpen={setMemDialogOpen} 
-                create={createMemory} parentFolder={fileSystem}
+                create={createMemory} parentFolder={fileSystem.rootFolder}
             />
           </Flex>
         </Flex>
@@ -88,7 +89,63 @@ const Page = () => {
           </Flex>
         </Flex>
       </Flex>
-    </Box>
+      <Flex direction="column" width="35%"><Flex direction="column" p="9">
+          <Text size="7"> News </Text>
+          <Flex direction="column" width="100%"gap="2" p="6">
+            <Text>
+	          <HoverCard.Root>
+	          	<HoverCard.Trigger>
+	          		<Link>
+	          			<Text>Tecnología de Memorium segura</Text>
+	          		</Link>
+	          	</HoverCard.Trigger>
+	          	<HoverCard.Content maxWidth="400px">
+	          		<Flex gap="4">
+	          			<Box>
+	          				<Heading size="3" as="h3">
+                      Tecnología de Memorium segura
+	          				</Heading>
+	          				<Text as="div" size="2">
+	          					<br/>Un reciente estudio financiado por Memorium® muestra quela tecnología de manipulación de memorias es completamente segura !!! <br/>
+                      solo un 34% de los sujetos de pruebas sufrieron daños permanentes.
+	          				</Text>
+	          			</Box>
+	          		</Flex>
+	          	</HoverCard.Content>
+	          </HoverCard.Root>{" "}
+            </Text>
+            <Separator size="4"/>
+            <Text>
+	          <HoverCard.Root>
+	          	<HoverCard.Trigger>
+	          		<Link>
+	          			<Text>Busqueda automática</Text>
+	          		</Link>
+	          	</HoverCard.Trigger>
+	          	<HoverCard.Content maxWidth="400px">
+	          		<Flex gap="4">
+	          			<Box>
+	          				<Heading size="3" as="h3">
+                      Búsqueda automática
+	          				</Heading>
+	          				<Text as="div" size="2">
+	          					<br/>En la pestaña de busqueda si presionas el botón 
+	                    <Button variant="soft" size="1">
+	                    	Infer 
+	                    	<BrainIcon size="16px"/>
+	        	          </Button> el sistema de manipulación de memorias detectará que estás buscando y te llevará directamente.
+	          				</Text>
+	          			</Box>
+	          		</Flex>
+	          	</HoverCard.Content>
+	          </HoverCard.Root>{" "}
+            </Text>
+          </Flex>
+        </Flex>
+        
+      </Flex>
+      </Flex>
+    </Container>
   );
 }
 

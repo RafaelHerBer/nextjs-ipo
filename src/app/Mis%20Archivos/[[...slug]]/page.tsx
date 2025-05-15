@@ -1,24 +1,36 @@
+"use client"
 import { BackButton } from "@/components/BackButton";
 import { FileCard, FolderCard } from "@/components/FileCards";
-import { FileView } from "@/components/FileView";
-//import dynamic from 'next/dynamic'
+//import { FileView } from "@/components/FileView";
+const FileView = dynamic(
+  () => import('../../../components/FileView').then(mod => mod.FileView),
+  { ssr: false }
+);
  
 import { SmallTypeIcon, TypeIcon } from "@/components/TypeIcon";
 import { getFileSystem } from "@/utils/files";
 import { Box, Button, Card, Flex, Section, Text, Separator, Link, ContextMenu } from "@radix-ui/themes";
 import { Pencil, File, Brain, Folder, ArrowUpRightSquare, ArrowUpRightFromSquareIcon, FileIcon, BrainIcon } from "lucide-react";
+import dynamic from "next/dynamic";
+import { useParams } from 'next/navigation'; // App Router
 
-const Page = async ({
-  params,
-}: {
-  params: Promise<{ slug?: string[] }>
-}) => 
-  {
-    const { slug } = await params
+
+const Page = () => {
+    const params = useParams();
+    
+    const slug = params.slug
     var pathArray: string [] = ["Mis Archivos"]
     var path: string = "Mis Archivos/"
     if(slug){
-      slug.forEach(folder => {
+      var slugArray: string[] = []
+      var array = slug as string[]
+      var estring = slug as string
+      if(array){      
+        slugArray = slugArray.concat(array)
+      }else{
+        slugArray.push(estring)
+      }
+      slugArray.forEach(folder => {
         path += folder.replaceAll("%20", " ")+"/"
         pathArray.push(folder.replaceAll("%20", " "))
       })
@@ -36,7 +48,6 @@ const Page = async ({
         path.forEach((pathSegment,pathIndex)=>{
           if(pathIndex<=indx){
           fullPath += pathSegment.trim() + "/"
-          console.log(pathSegment.trim())
           }
         })
         fullPath = fullPath.substring(0,fullPath.length-1)

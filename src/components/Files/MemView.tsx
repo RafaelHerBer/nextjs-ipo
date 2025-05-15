@@ -3,7 +3,7 @@ import { Box, Flex, Separator, Text, Container, Card, Dialog, TextField, Button,
 import * as NativeContextMenu from "@radix-ui/react-context-menu"
 import * as NativeDropdownMenu from "@radix-ui/react-dropdown-menu"
 import { ContextMenu } from "@radix-ui/themes"
-import { MemDocument, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
+import { MemDocument, MemFileSystem, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
 import { FileCard, FolderCard } from "../FileCards"
 import { ArrowDownIcon, ArrowUpIcon, BrainIcon, Cone, FileIcon, FolderIcon, PencilIcon, Plus } from "lucide-react"
 import React from "react"
@@ -14,7 +14,7 @@ import BrainInterface from "../BrainInterFace"
 type MemViewDysplayProps = {
     memory: MemMemory
     path: string
-    fileSystem: MemFolder
+    fileSystem: MemFileSystem
 }
 export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem})=>{
     var name = memory.name
@@ -68,6 +68,7 @@ export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem}
             </Card>
         )
     }
+    
     var actualDate = new Date(memory.date)
     var dateString = actualDate.getDate()+"/"+actualDate.getMonth()+"/"+actualDate.getFullYear()
 

@@ -3,7 +3,7 @@ import { Box, Flex, Separator, Text, Container, Card, Dialog, TextField, Button,
 import * as NativeContextMenu from "@radix-ui/react-context-menu"
 import * as NativeDropdownMenu from "@radix-ui/react-dropdown-menu"
 import { ContextMenu } from "@radix-ui/themes"
-import { MemDocument, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
+import { addFile, MemDocument, MemFileSystem, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
 import { FileCard, FolderCard } from "../FileCards"
 import { BrainIcon, FileIcon, FolderIcon, Pencil, Plus } from "lucide-react"
 import React from "react"
@@ -12,9 +12,17 @@ import { FileCreationDialog } from "../UtilityDialog"
 type FolderViewDysplayProps = {
     folder: MemFolder
     path: string
-    fileSystem: MemFolder
+    fileSystem: MemFileSystem
 }
 export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileSystem})=>{
+    //Making sure that it runs on client 
+    const [isClient, setIsClient] = React.useState(false)
+   
+    React.useEffect(() => {
+      setIsClient(true)
+    }, [])
+   
+  
     var subFolders = folder.childFolders
     var subFiles = folder.childDatafiles
     
@@ -83,18 +91,15 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
     }
     const createFolder = (name:string, parentFolder:MemFolder)=>{
         let newFolder = new MemFolder(name);
-        parentFolder.childFolders.push(newFolder);
-        saveFileSystem(fileSystem);
+        addFile(newFolder, parentFolder, fileSystem);
     }
     const createDocument = (name:string, parentFolder:MemFolder)=>{
         let newDoc = new MemDocument(name,"");
-        parentFolder.childDatafiles.push(newDoc);
-        saveFileSystem(fileSystem);
+        addFile(newDoc, parentFolder, fileSystem);
     }
     const createMemory = (name:string, parentFolder:MemFolder)=>{
         let newMem = new MemMemory(name,"");
-        parentFolder.childDatafiles.push(newMem);
-        saveFileSystem(fileSystem);
+        addFile(newMem, parentFolder, fileSystem);
     }
     return(
         <ContextMenu.Root>

@@ -4,19 +4,19 @@ import { Brain, File, Folder} from "lucide-react"
 import * as React from "react"
 export const SmallTypeIcon = (type: string) => {
     switch(type){
-        case "Memory":
+        case "memory":
             return(
                 <Flex direction="column" justify="center">
                     <Brain size="16"/>
                 </Flex>
             )
-        case "Document":
+        case "document":
             return(
                 <Flex direction="column" justify="center">
                     <File size="16"/>
                 </Flex>
             )
-        case "Folder":
+        case "folder":
             return(
                 <Flex direction="column" justify="center">
                     <Folder size="16"/>
@@ -38,19 +38,19 @@ type TypeIconProps = {
 }
 export const TypeIcon:React.FC<TypeIconProps> = ({type}) => {
     switch(type){
-        case "Memory":
+        case "memory":
             return(
                 <Flex direction="column" justify="center">
                     <Brain />
                 </Flex>
             )
-        case "Document":
+        case "document":
             return(
                 <Flex direction="column" justify="center">
                     <File />
                 </Flex>
             )
-        case "Folder":
+        case "folder":
             return(
                 <Flex direction="column" justify="center">
                     <Folder />

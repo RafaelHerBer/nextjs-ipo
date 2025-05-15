@@ -2,7 +2,7 @@
 import { Box, Flex, Separator, Text, Container, Card, Dialog, TextField, Button, TextArea} from "@radix-ui/themes"
 import * as NativeContextMenu from "@radix-ui/react-context-menu"
 import { ContextMenu } from "@radix-ui/themes"
-import { MemDocument, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
+import { MemDocument, MemFileSystem, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
 import { FileCard, FolderCard } from "../FileCards"
 import { BrainIcon, Cone, FileIcon, FolderIcon, PencilIcon, Plus } from "lucide-react"
 import React from "react"
@@ -11,7 +11,7 @@ import { ConfirmationDialog, FileCreationDialog } from "../UtilityDialog"
 type DocViewDysplayProps = {
     document: MemDocument
     path: string
-    fileSystem: MemFolder
+    fileSystem: MemFileSystem
 }
 export const DocView:React.FC<DocViewDysplayProps> = ({document, path, fileSystem})=>{
     var name = document.name

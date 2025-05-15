@@ -8,7 +8,8 @@ import { Collapsible, Dialog } from "radix-ui"
 import { Container, root } from "postcss"
 import { Row } from "@radix-ui/themes/src/components/table.jsx"
 import { useTransition, animated, config } from "react-spring";
-import { DefaultFilesystem, getFileSystem, MemFolder } from "@/utils/files"
+import { getDefaultFileSystem, getFileSystem, MemFolder } from "@/utils/files"
+import dynamic from "next/dynamic"
 
 export const SideBar = () =>{
 	const [open, setOpen] = React.useState(false)	
@@ -30,8 +31,11 @@ export const SideBar = () =>{
 		foldersOpened[folder.name] = React.useState(false)
 		folder.childFolders.forEach(stateForFolder);
 	}
+	if (typeof window == 'undefined') {
+		return
+	}
 	let fileSystem = getFileSystem()
-	stateForFolder(fileSystem)
+	stateForFolder(fileSystem.rootFolder)
 	const BarElement = () => (
 			<Flex direction={"column"} justify="start" height="100%" width="80px"p="4" gap="4">
 				<Button // style={{background: "var(--accentColor)"}}
@@ -81,6 +85,7 @@ export const SideBar = () =>{
 			subFolders.push(MenuFolder(element, path+folder.name+"/"))
 		});	
 		folder.childDatafiles.forEach(element => {
+			console.log(element)
 			subFiles.push(MenuFile(element.name,element.type, path+folder.name+"/"))
 		})
 		return (
@@ -129,7 +134,7 @@ export const SideBar = () =>{
 			<Flex
 			align="start" direction="column">
 				<>
-					{MenuFolder(fileSystem, "/")}
+					{MenuFolder(fileSystem.rootFolder, "/")}
 				</>
 			</Flex>
 		</Box>

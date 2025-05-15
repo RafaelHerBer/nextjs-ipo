@@ -7,7 +7,7 @@ import { Collapsible, Dialog } from "radix-ui"
 import { Container, root } from "postcss"
 import { Row } from "@radix-ui/themes/src/components/table.jsx"
 import { useTransition, animated, config } from "react-spring";
-import { DefaultFilesystem, getFileSystem, MemFolder } from "@/utils/files"
+import { DefaultRootFolder, getFileSystem, MemFolder } from "@/utils/files"
 import { wrap } from "module"
 import { SearchBar } from "./SearchBar"
 
