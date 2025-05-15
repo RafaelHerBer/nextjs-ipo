@@ -1,14 +1,12 @@
 "use client"
-import { Box, Flex, Separator, Text, Container, Card, Dialog, TextField, Button, TextArea, DropdownMenu} from "@radix-ui/themes"
+import { Box, Flex, Separator, Text, Card, Button, TextArea, DropdownMenu} from "@radix-ui/themes"
 import * as NativeContextMenu from "@radix-ui/react-context-menu"
 import * as NativeDropdownMenu from "@radix-ui/react-dropdown-menu"
 import { ContextMenu } from "@radix-ui/themes"
-import { MemDocument, MemFileSystem, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
-import { FileCard, FolderCard } from "../FileCards"
-import { ArrowDownIcon, ArrowUpIcon, BrainIcon, Cone, FileIcon, FolderIcon, PencilIcon, Plus } from "lucide-react"
+import { MemFileSystem, MemMemory, saveFileSystem } from "@/utils/files"
+import { ArrowDownIcon, ArrowUpIcon, BrainIcon, PencilIcon } from "lucide-react"
 import React from "react"
-import { ConfirmationDialog, FileCreationDialog } from "../UtilityDialog"
-import { ColorWheelIcon } from "@radix-ui/react-icons"
+import { ConfirmationDialog } from "../UtilityDialog"
 import BrainInterface from "../BrainInterFace"
 
 type MemViewDysplayProps = {

@@ -9,6 +9,12 @@ const config = {
     "next/core-web-vitals",
     "prettier",
   ],
+  rules_:{
+    "no-var":"off",
+    "@typescript-eslint/no-unsafe-assignment":"off",
+    "prefer-const":"off",
+    "@typescript-eslint/consistent-indexed-object-style":"off"
+  },
   plugins: ["@typescript-eslint"],
   parser: "@typescript-eslint/parser",
   parserOptions: {

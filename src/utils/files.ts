@@ -1,7 +1,6 @@
 "use client"
 import { v4 as uuidv4 } from 'uuid';
-import *  as cookie from 'js-cookie';
-//import * as fs from 'fs';
+
 
 export interface MemFile {
     name:string ;
@@ -56,13 +55,10 @@ export class MemMemory implements MemDatafile{
     }
 }
 export const saveFileSystem = (fileSystem:{rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string}} })=>{
-    localStorage.setItem("rootfolder", JSON.stringify(fileSystem.rootFolder))
-    //var list: string[] = []
-    //for(var key in fileSystem.fileList){
-    //    list.push(key)
-    //    localStorage.setItem("files:"+key, JSON.stringify(fileSystem.fileList[key]))
-    //}
-    localStorage.setItem("filelist", JSON.stringify(fileSystem.fileList))
+    if(typeof window !== "undefined"){
+        window.localStorage.setItem("rootfolder", JSON.stringify(fileSystem.rootFolder))
+        window.localStorage.setItem("filelist", JSON.stringify(fileSystem.fileList))
+    }
 }
 export const addFile = (file:MemFile, parent:MemFolder,
     fileSystem?:{rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string}} }, notSave?:void)=>
@@ -117,24 +113,28 @@ export const getDefaultFileSystem = ()=>{
 export const getFileSystem:()=>{rootFolder:MemFolder,fileList:{[id: string]: {file:MemFile,path:string}} }  = () => {
 	var rootFolder: MemFolder | undefined;
     var fileList: {[id: string]: {file:MemFile,path:string}} = {}
-
-    let cookieRootFolder = localStorage.getItem("rootfolder")
-    let cookieFileList = localStorage.getItem("filelist")
-    if(!cookieRootFolder || !cookieFileList){
-        var defaultFileSystem = getDefaultFileSystem()
-        saveFileSystem(defaultFileSystem)
-        return defaultFileSystem
+    if(typeof window !== "undefined"){
+        let cookieRootFolder = window.localStorage.getItem("rootfolder")
+        let cookieFileList = window.localStorage.getItem("filelist")
+        if(!cookieRootFolder || !cookieFileList){
+            var defaultFileSystem = getDefaultFileSystem()
+            saveFileSystem(defaultFileSystem)
+            return defaultFileSystem
+        }
+        rootFolder = JSON.parse(cookieRootFolder)
+        fileList = JSON.parse(cookieFileList)
+    
+        if(!rootFolder || !fileList){
+            var defaultFileSystem = getDefaultFileSystem()
+            saveFileSystem(defaultFileSystem)
+            return defaultFileSystem
+        }
+        console.log({rootFolder:rootFolder, fileList:fileList})
+        return {rootFolder:rootFolder, fileList:fileList}
     }
-    rootFolder = JSON.parse(cookieRootFolder)
-    fileList = JSON.parse(cookieFileList)
-
-    if(!rootFolder || !fileList){
-        var defaultFileSystem = getDefaultFileSystem()
-        saveFileSystem(defaultFileSystem)
-        return defaultFileSystem
-    }
-    console.log({rootFolder:rootFolder, fileList:fileList})
-    return {rootFolder:rootFolder, fileList:fileList}
+    var defaultFileSystem = getDefaultFileSystem()
+    saveFileSystem(defaultFileSystem)
+    return defaultFileSystem
 }
 /* Cant use this, cookies too large
 

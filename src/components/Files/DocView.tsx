@@ -1,12 +1,11 @@
 "use client"
-import { Box, Flex, Separator, Text, Container, Card, Dialog, TextField, Button, TextArea} from "@radix-ui/themes"
+import { Box, Flex, Separator, Text, Card, Button, TextArea} from "@radix-ui/themes"
 import * as NativeContextMenu from "@radix-ui/react-context-menu"
 import { ContextMenu } from "@radix-ui/themes"
-import { MemDocument, MemFileSystem, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
-import { FileCard, FolderCard } from "../FileCards"
-import { BrainIcon, Cone, FileIcon, FolderIcon, PencilIcon, Plus } from "lucide-react"
+import { MemDocument, MemFileSystem, saveFileSystem } from "@/utils/files"
+import { PencilIcon } from "lucide-react"
 import React from "react"
-import { ConfirmationDialog, FileCreationDialog } from "../UtilityDialog"
+import { ConfirmationDialog } from "../UtilityDialog"
 
 type DocViewDysplayProps = {
     document: MemDocument

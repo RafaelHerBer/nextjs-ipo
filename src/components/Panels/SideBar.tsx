@@ -1,15 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { Box, Button, Card, Flex, Link, Section, Separator, Text, TextField, Theme } from "@radix-ui/themes"
-import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp, File, FileIcon } from "lucide-react"
+import { Box, Button, Card, Flex, Link, Section, Text } from "@radix-ui/themes"
+import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp } from "lucide-react"
 import { SmallTypeIcon } from "../TypeIcon"
-import { Collapsible, Dialog } from "radix-ui"
-import { Container, root } from "postcss"
-import { Row } from "@radix-ui/themes/src/components/table.jsx"
+import { Collapsible } from "radix-ui"
 import { useTransition, animated, config } from "react-spring";
-import { getDefaultFileSystem, getFileSystem, MemFolder } from "@/utils/files"
-import dynamic from "next/dynamic"
+import { getFileSystem, MemFolder } from "@/utils/files"
 
 export const SideBar = () =>{
 	const [open, setOpen] = React.useState(false)	

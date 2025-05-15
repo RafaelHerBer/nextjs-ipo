@@ -1,16 +1,11 @@
 "use client"
 
-import { FileCard, FolderCard } from "@/components/FileCards";
-import { SmallTypeIcon, TypeIcon } from "@/components/TypeIcon";
 import { getFileSystem, MemFolder, MemDatafile, MemDocument, MemMemory } from "@/utils/files";
-import { Box, Button, Card, Flex, Section, Text, Separator, Link } from "@radix-ui/themes";
-import { Pencil, File, Brain, Folder, ArrowUpRightSquare, ArrowUpRightFromSquareIcon } from "lucide-react";
+import { Text } from "@radix-ui/themes";
 import { FolderView } from "./Files/FolderView";
 
-import dynamic from 'next/dynamic'
 import { DocView } from "./Files/DocView";
 import { MemView } from "./Files/MemView";
-import path from "path";
 import React from "react";
  
 type FileViewProps = {

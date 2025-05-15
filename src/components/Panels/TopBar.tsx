@@ -1,14 +1,7 @@
 "use client"
 import * as React from "react"
-import { Box, Button, Card, Flex, Link, Section, Separator, Text, TextField, Theme } from "@radix-ui/themes"
-import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp, File, FileIcon, Search, Book } from "lucide-react"
-import { SmallTypeIcon } from "../TypeIcon"
-import { Collapsible, Dialog } from "radix-ui"
-import { Container, root } from "postcss"
-import { Row } from "@radix-ui/themes/src/components/table.jsx"
-import { useTransition, animated, config } from "react-spring";
-import { DefaultRootFolder, getFileSystem, MemFolder } from "@/utils/files"
-import { wrap } from "module"
+import { Box, Button, Flex, Link } from "@radix-ui/themes"
+import { Book } from "lucide-react"
 import { SearchBar } from "./SearchBar"
 
 export const TopBar = () =>{

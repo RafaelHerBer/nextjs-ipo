@@ -1,13 +1,7 @@
 "use client"
 import * as React from "react"
-import { Box, Button, Card, Flex, Link, Section, Separator, Text, TextField, Theme } from "@radix-ui/themes"
-import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp, File, FileIcon, Search, Book } from "lucide-react"
-import { SmallTypeIcon } from "../TypeIcon"
-import { Collapsible, Dialog } from "radix-ui"
-import { Container, root } from "postcss"
-import { Row } from "@radix-ui/themes/src/components/table.jsx"
-import { useTransition, animated, config } from "react-spring";
-import { wrap } from "module"
+import { Box, TextField } from "@radix-ui/themes"
+import { Search } from "lucide-react"
 
 type SearchBarProps = {
     search: string

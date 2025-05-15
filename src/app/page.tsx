@@ -1,9 +1,9 @@
 "use client"
-import { SmallTypeIcon, TypeIcon } from "@/components/TypeIcon";
+import { TypeIcon } from "@/components/TypeIcon";
 import { FileCreationDialog } from "@/components/UtilityDialog";
 import { getFileSystem, MemDocument, MemFolder, MemMemory, saveFileSystem } from "@/utils/files";
-import { Box, Button, Card, Flex, Section, Text, Separator, Link, Container, HoverCard, Heading } from "@radix-ui/themes";
-import { Pencil, File, Brain, Folder, ArrowUpRightSquare, ArrowUpRightFromSquareIcon, BrainIcon } from "lucide-react";
+import { Box, Button, Flex, Text, Separator, Link, Container, HoverCard, Heading } from "@radix-ui/themes";
+import { Pencil, File, Brain, ArrowUpRightFromSquareIcon, BrainIcon } from "lucide-react";
 import React from "react";
 import { redirect } from "next/navigation";
 const Page = () => {

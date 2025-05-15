@@ -1,16 +1,11 @@
 "use client"
 import { BackButton } from "@/components/BackButton";
-import { FileCard, FolderCard } from "@/components/FileCards";
-//import { FileView } from "@/components/FileView";
 const FileView = dynamic(
   () => import('../../../components/FileView').then(mod => mod.FileView),
   { ssr: false }
 );
  
-import { SmallTypeIcon, TypeIcon } from "@/components/TypeIcon";
-import { getFileSystem } from "@/utils/files";
-import { Box, Button, Card, Flex, Section, Text, Separator, Link, ContextMenu } from "@radix-ui/themes";
-import { Pencil, File, Brain, Folder, ArrowUpRightSquare, ArrowUpRightFromSquareIcon, FileIcon, BrainIcon } from "lucide-react";
+import { Box, Card, Flex, Link } from "@radix-ui/themes";
 import dynamic from "next/dynamic";
 import { useParams } from 'next/navigation'; // App Router
 
