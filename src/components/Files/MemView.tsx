@@ -7,7 +7,7 @@ import { deleteFile, MemFileSystem, MemMemory, saveFileSystem } from "@/utils/fi
 import { ArrowDownIcon, ArrowUpIcon, BrainIcon, PencilIcon } from "lucide-react"
 import React from "react"
 import { ConfirmationDialog } from "../UtilityDialog"
-import BrainInterface from "../BrainInterFace"
+import { BrainInterface } from "../BrainInterFace"
 
 type MemViewDysplayProps = {
     memory: MemMemory

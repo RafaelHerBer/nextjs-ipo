@@ -74,6 +74,29 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
         let newMem = new MemMemory(name,"");
         addFile(newMem, parentFolder, fileSystem);
     }
+    const DropDownMenu = ()=>{
+        return(
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <Button variant="soft" size="4">
+                        Opciones
+                        <DropdownMenu.TriggerIcon />
+                    </Button>
+                </DropdownMenu.Trigger>
+                <NativeDropdownMenu.Content>
+                <Card>
+                    <DropdownMenu.Item onClick={()=>setFolderDialogOpen(true)}><FolderIcon/>New Folder</DropdownMenu.Item>
+                    <DropdownMenu.Item onClick={()=>setDocDialogOpen(true)}><FileIcon/>New Documento</DropdownMenu.Item>
+                    <DropdownMenu.Item onClick={()=>setMemDialogOpen(true)}><BrainIcon/>New Memoria</DropdownMenu.Item>
+                    
+                    <DropdownMenu.Item color="red" onClick={()=>setDelDialogOpen(true)}>
+                        Delete "{folder.name}"
+                    </DropdownMenu.Item>
+                </Card>
+                </NativeDropdownMenu.Content>
+            </DropdownMenu.Root>
+        )
+    }
     return(
         <>
             <FilesNavView dataFiles={subFiles} folders={subFolders} fileSystem={fileSystem}
@@ -87,17 +110,7 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
                         Delete "{folder.name}"
                     </ContextMenu.Item>
                 </Card>
-            } DropdownMenuItems={
-                <Card>
-                    <DropdownMenu.Item onClick={()=>setFolderDialogOpen(true)}><FolderIcon/>New Folder</DropdownMenu.Item>
-                    <DropdownMenu.Item onClick={()=>setDocDialogOpen(true)}><FileIcon/>New Documento</DropdownMenu.Item>
-                    <DropdownMenu.Item onClick={()=>setMemDialogOpen(true)}><BrainIcon/>New Memoria</DropdownMenu.Item>
-                    
-                    <DropdownMenu.Item color="red" onClick={()=>setDelDialogOpen(true)}>
-                        Delete "{folder.name}"
-                    </DropdownMenu.Item>
-                </Card>
-            } />
+            } DownRightButton={ <DropDownMenu/> }/>
             <FileCreationDialog type="Folder"
                 open={folderDialogOpen} setOpen={setFolderDialogOpen} 
                 create={createFolder} parentFolder={folder}

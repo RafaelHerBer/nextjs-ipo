@@ -14,9 +14,9 @@ type FilesNavViewDysplayProps = {
     folders: MemFolder[]
     fileSystem: MemFileSystem
     ContextMenuItems: React.ReactNode
-    DropdownMenuItems: React.ReactNode
+    DownRightButton: React.ReactNode
 }
-export const FilesNavView:React.FC<FilesNavViewDysplayProps> = ({dataFiles,folders, fileSystem, ContextMenuItems,DropdownMenuItems})=>{
+export const FilesNavView:React.FC<FilesNavViewDysplayProps> = ({dataFiles,folders, fileSystem, ContextMenuItems,DownRightButton})=>{
     //Making sure that it runs on client 
     const [isClient, setIsClient] = React.useState(false)
    
@@ -59,7 +59,10 @@ export const FilesNavView:React.FC<FilesNavViewDysplayProps> = ({dataFiles,folde
         <ContextMenu.Trigger>
             <Flex width="100%" height="100%" direction="column">
                 <Box width="100%" >
-                    <Text size={"6"}>Folders:</Text>
+                    <Box width="110px">
+                        <Text size={"6"}>Carpetas:</Text>
+                        <Separator size="4"/>
+                    </Box>
                     <Flex>
                     {
                         folderComponents
@@ -68,6 +71,10 @@ export const FilesNavView:React.FC<FilesNavViewDysplayProps> = ({dataFiles,folde
                 </Box>
                 <Separator size="4"/>
                 <Box>
+                    <Box width="110px">
+                        <Text size={"6"}>Archivos:</Text>
+                        <Separator size="4"/>
+                    </Box>
                     <Flex>
                     {
                         filesComponents
@@ -78,17 +85,7 @@ export const FilesNavView:React.FC<FilesNavViewDysplayProps> = ({dataFiles,folde
         </ContextMenu.Trigger>
         <Box position="fixed"
             bottom="40px" right="40px">
-            <DropdownMenu.Root>
-                <DropdownMenu.Trigger>
-                    <Button variant="soft" size="4">
-                        Opciones
-                        <DropdownMenu.TriggerIcon />
-                    </Button>
-                </DropdownMenu.Trigger>
-                <NativeDropdownMenu.Content>
-                    {DropdownMenuItems}
-                </NativeDropdownMenu.Content>
-            </DropdownMenu.Root>
+            { DownRightButton }
         </Box>
 		<NativeContextMenu.Content>
 			{ContextMenuItems}

@@ -58,17 +58,17 @@ const Page = () => {
     }
     return (
       <Box width="100%" height="100%" py="5" px="160px">
-          <Box position="fixed" top="80px" left="50%" >
-            <Card>
-              <Flex dir="column" gap="2" align="center">
-                {
-                  PathLinks(pathArray)
-                }
+        <Box position="fixed" top="80px" left="50%" >
+          <Card>
+            <Flex dir="column" gap="2" align="center">
+            {
+              PathLinks(pathArray)
+            } 
               <BackButton/>
-              </Flex>
-            </Card>
-          </Box>
-          <FileView pathString={path}/>
+            </Flex>
+          </Card>
+        </Box>
+        <FileView pathString={path}/>
       </Box>
     );
   }
