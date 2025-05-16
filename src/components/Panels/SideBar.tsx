@@ -1,20 +1,20 @@
 "use client"
 
 import * as React from "react"
-import { Box, Button, Card, Flex, Link, Section, Text } from "@radix-ui/themes"
-import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp, LinkedinIcon } from "lucide-react"
+import { Box, Button, Card, Flex, Link, Section, Text, Theme, Dialog } from "@radix-ui/themes"
+import { Menu, Folder, SettingsIcon, ArrowDown, ArrowUp, LinkedinIcon, ChevronDown, ChevronUp, Book, ChevronRight, ConstructionIcon } from "lucide-react"
 import { SmallTypeIcon } from "../TypeIcon"
-import { Collapsible } from "radix-ui"
+import { Collapsible,  } from "radix-ui"
 import { useTransition, animated, config } from "react-spring";
 import { getFileSystem, MemFolder } from "@/utils/files"
 
 export const SideBar = () =>{
 	const [open, setOpen] = React.useState(false)	
-	const [container, setContainer] = React.useState(null);
+	const [settingsOpen, setSettingsOpen] = React.useState(false)
 	const transitions = useTransition(open, {
-		from: { opacity: 1, x: 0 },
-		enter: { opacity: 1, x: 0 },
-		leave: { opacity: 0, x: 0 },
+		from: { opacity: "0%" },
+		enter: { opacity: "100%"},
+		leave: { opacity: "0%" },
 		config: config.default,
 	});
 
@@ -25,7 +25,7 @@ export const SideBar = () =>{
 		]  
 	} = {}
 	const stateForFolder = (folder: MemFolder)=>{
-		foldersOpened[folder.name] = React.useState(false)
+		foldersOpened[folder.name] = React.useState(true)
 		folder.childFolders.forEach(stateForFolder);
 	}
 	if (typeof window == 'undefined') {
@@ -34,12 +34,7 @@ export const SideBar = () =>{
 	let fileSystem = getFileSystem()
 	stateForFolder(fileSystem.rootFolder)
 	const BarElement = () => (
-			<Flex direction={"column"} justify="start" height="100%" width="80px"p="4" gap="4">
-				<Button // style={{background: "var(--accentColor)"}}
-					variant="ghost" onClick={()=>setOpen(!open)}
-				>
-					<Menu size="46px"/>
-				</Button>
+			<Flex direction={"column"} justify="start" height="100%" width="children"align="start" p="4" gap="4">
 				<Section size="4"/>
 				<Flex direction={"column"}  gap="5">
 					<Button // style={{background: "var(--accentColor)"}}
@@ -49,11 +44,38 @@ export const SideBar = () =>{
 							<Folder size="32px"/>
 						</Link>
 					</Button>
-					<Button // style={{background: "var(--accentColor)"}}
-						variant="ghost" onClick={()=>setOpen(true)}
-					>
-						<SettingsIcon size="32px"/>
-					</Button>
+					<Section height="510px"/>
+					<Dialog.Root>
+						<Dialog.Trigger>
+							<Button variant="ghost">
+								<SettingsIcon size="32px"/>
+							</Button>
+						</Dialog.Trigger>
+
+						<Dialog.Content maxWidth="450px">
+							<Dialog.Title>Ajustes</Dialog.Title>
+							<Dialog.Description size="2" mb="4">
+								En construcción
+							</Dialog.Description>
+
+							<Flex direction="column" gap="3">
+								<label>
+									<ConstructionIcon/>
+								</label>
+							</Flex>
+
+							<Flex gap="3" mt="4" justify="end">
+								<Dialog.Close>
+									<Button variant="soft" color="gray">
+										Cancel
+									</Button>
+								</Dialog.Close>
+								<Dialog.Close>
+									<Button>Save</Button>
+								</Dialog.Close>
+							</Flex>
+						</Dialog.Content>
+					</Dialog.Root>
 				</Flex>
 			</Flex>
 	)
@@ -61,22 +83,22 @@ export const SideBar = () =>{
 		setOpen:React.Dispatch<React.SetStateAction<boolean>>,  path:string)=> {
 		return (
 			<Flex gap="2">
+				<Button onClick={()=>setOpen(!open)} variant="ghost" size="1">
+					{open ? <ChevronDown /> : <ChevronUp />}
+				</Button>
 				<Link  href={path} color="gold">
 					<Flex gap="2">
 							<Folder/>
 							<Text> {folderName} </Text>
 					</Flex>
 				</Link>
-				<Button onClick={()=>setOpen(!open)} variant="outline" size="1">
-					{open ? <ArrowDown /> : <ArrowUp />}
-				</Button>
 			</Flex>
 		)
 	}
 	const MenuFile = (fileName: string, type:string, path:string) => {
 		return (
 			<Link href={path+fileName} weight="medium" key={"menufile.Link"+path}>
-				<Flex gap="2">
+				<Flex gap="2" px="6">
 					<div/>
 					{SmallTypeIcon(type)}
 					<Text> {fileName} </Text>
@@ -99,7 +121,7 @@ export const SideBar = () =>{
 					className="CollapsibleRoot"
 					open={foldersOpened[folder.name][0]}
 					onOpenChange={foldersOpened[folder.name][1]}
-					key={"menufolder.collapsible.root"+path}
+					key={"menufolder.collapsible.root"+folder.id}
 				>
 				<Box p="3" width="100%">
 					<Card  variant="surface">
@@ -111,7 +133,6 @@ export const SideBar = () =>{
 							justifyContent: "space-between",
 						}}
 					>
-						
 						<div className="IconButton">
 							{FolderPanel(folder.name, foldersOpened[folder.name][0],
 								foldersOpened[folder.name][1], path+folder.name+"/")}
@@ -134,7 +155,7 @@ export const SideBar = () =>{
 		)
 	}
 	const MenuElement = () =>(
-		<Box height="100%" width="400px"
+		<Box height="100%" width="children"
 		//style={{background: "var(--gray-surface)"}}
 		>
 			<Flex
@@ -145,29 +166,81 @@ export const SideBar = () =>{
 			</Flex>
 		</Box>
 	)
+	const OpenIndicator = () => {
+		if(open){
+			return (
+				<Flex width="60px" justify="center">
+					<ChevronDown/>
+				</Flex>
+			)
+		}
+		else{
+			return (
+				<Flex width="60px" justify="center">
+					<ChevronRight/>
+				</Flex>
+			)
+		}
+	}
 	//if(open){
 	//	return (<Open/>)
 	//}
 	//return (<Closed/>)
-	return (		
-		<Box //onMouseOver={() => setOpen(true)}
-			height="100%" width={!open ? "80px": "500px"}
-			style={{background: "var(--gray-surface)", border: "1px solid var(--gray-5)"}}>
-			<Flex gap="0">
-				<BarElement/>
-				{
-					transitions((styles, item) =>
-						item ? (
-							<div>
-								<Section height="230px"/>
-								<animated.div style={styles}>
-									<MenuElement/>
-								</animated.div>
-							</div>
-						) : null,
-					)
-				}
-			</Flex>
-		</Box>	
+	const HomeButton = ()=>{
+		if(open){
+			return(
+				<Button variant="soft" onClick={()=>window.location.href="/"}
+					radius="large" asChild>
+					<Box width="children" height="60px">
+						<Book size="36px"/>
+						<Text> Memorium </Text>
+					</Box>
+				</Button>
+			)
+		}
+		return(
+			<Button variant="soft" onClick={()=>window.location.href="/"}
+				radius="large" asChild>
+					<Box width="60px" height="60px">
+						<Book size="36px"/>
+					</Box>
+			</Button>
+		)
+	}	
+	const PosibleBar = ()=>{
+		if(open)
+		return(
+			transitions((styles, item) =>
+				item ? (
+					<>
+						<Section height="170px"/>
+						<animated.div style={styles}>
+							<MenuElement/>
+						</animated.div>
+					</>
+				) : null,
+			)
+		)
+		return (<></>)
+	}
+	return (	
+		<Theme radius="none">	
+			<Box onMouseOver={() => setOpen(true)} onMouseLeave={()=>setOpen(false)}
+				height="100%" width="children" // width={!open ? "100px": "children"}
+				asChild>
+				<Card>
+				<Theme radius="medium">
+					<HomeButton/>
+					<OpenIndicator/>
+					<Flex gap="0" width="100%">
+						<Flex direction="column" justify="center">
+							<BarElement/>
+						</Flex>
+						<PosibleBar/>
+					</Flex>
+				</Theme>
+				</Card>
+			</Box>	
+		</Theme>
 	)
 }

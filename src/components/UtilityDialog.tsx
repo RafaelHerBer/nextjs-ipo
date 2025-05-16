@@ -27,9 +27,9 @@ export const FileCreationDialog:React.FC<FileCreationDialogProps> = ({type, open
                         Name
                     </Text>
                     <TextField.Root value={fileName} onChange={(e)=>{setFileName(e.target.value)}}
-                        defaultValue="Freja Johnsen"
-                        placeholder="Enter your full name"
+                        defaultValue="Carpeta"
                     />
+                    
                 </label>
             </Flex>
         
@@ -68,7 +68,7 @@ export const ConfirmationDialog:React.FC<ConfirmationDialogProps> = ({actionStri
                 <Dialog.Close>
                     <Button variant="soft" color="gray"
                         onClick={()=>{cancelAction();setOpen(false)}}>
-                        Cancel
+                        Cancelar
                     </Button>
                 </Dialog.Close>
                 <Dialog.Close>
