@@ -21,11 +21,7 @@ export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem}
     const [openDialog, setOpenDialog] = React.useState(false)
     const [openInterface, setOpenInterface] = React.useState(false)
     const [delDialogOpen, setDelDialogOpen] = React.useState(false)	
-    
-    const saveMemory = ()=>{
-        memory.description = description
-        saveFileSystem(fileSystem);
-    }
+
     const CMOpenSpace = ()=>{
         return(
             <Card>
@@ -75,9 +71,10 @@ export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem}
     }
     const ScanMemory = ()=>{
         setOpenInterface(true);memory.date=new Date();
-        setDescription("Descripción Generada Automáticamente");
+        setDescription("Descripción inferída Automáticamente");
         memory.lastMemory=new Date();
-        saveMemory();
+        memory.description = description
+        saveFileSystem(fileSystem);
     }
     const toggleEdit = ()=>{
         setEdit(!edit);
@@ -212,7 +209,7 @@ export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem}
             deleteFile(memory)
             window.location.href = "/Mis Archivos"
             }} cancelAction={()=>{}}/>
-        <ConfirmationDialog actionString="save memory" action={()=>saveMemory()} 
+        <ConfirmationDialog actionString="save memory" action={()=>{memory.description = description;saveFileSystem(fileSystem);}} 
             cancelAction={()=>{setDescription(memory.description)}} open={openDialog} setOpen={setOpenDialog}/>
 		<BrainInterface isActive={openInterface} setIsActive={setOpenInterface}/>
         <Box position="fixed"
