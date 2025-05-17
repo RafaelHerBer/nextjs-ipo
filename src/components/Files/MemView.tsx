@@ -4,7 +4,7 @@ import * as NativeContextMenu from "@radix-ui/react-context-menu"
 import * as NativeDropdownMenu from "@radix-ui/react-dropdown-menu"
 import { ContextMenu } from "@radix-ui/themes"
 import { deleteFile, MemFileSystem, MemMemory, saveFileSystem } from "@/utils/files"
-import { ArrowDownIcon, ArrowUpIcon, BrainIcon, PencilIcon } from "lucide-react"
+import { ArrowDownIcon, ArrowUpIcon, BrainIcon, PencilIcon, SaveIcon, Trash2Icon } from "lucide-react"
 import React from "react"
 import { ConfirmationDialog } from "../UtilityDialog"
 import { BrainInterface } from "../BrainInterFace"
@@ -28,42 +28,107 @@ export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem}
     }
     const CMOpenSpace = ()=>{
         return(
-        <>
-            <ContextMenu.Item onClick={()=>{
-                    setEdit(!edit);
-                    if(edit){
-                        setOpenDialog(true)
-                    }
-                }}><PencilIcon/>Edit</ContextMenu.Item>
-            <ContextMenu.Separator />
-            <ContextMenu.Item color="red" onClick={()=>setDelDialogOpen(true)}>
-                Delete
-            </ContextMenu.Item>
-        </>
+            <Card>
+	            <ContextMenu.Item style={{width:"100%"}}>
+                    <Button onClick={()=>toggleEdit()}
+                        variant="ghost" asChild>
+                        <Box width="100%" p="2" px="4">
+                            <Flex width="100%" align="center" gap="1">
+                                {edit?<SaveIcon/>:<PencilIcon/>}
+                                <Text>{edit?"Guardar Memoria":"Edit"}</Text>
+                            </Flex>
+                        </Box>
+                    </Button>
+                </ContextMenu.Item>
+	            <ContextMenu.Item style={{width:"100%"}}>
+                    <Button onClick={()=>ScanMemory()}
+                        variant="ghost" asChild>
+                        <Box width="100%" p="2" px="4">
+                            <Flex width="100%" align="center" gap="1">
+                                <BrainIcon/><ArrowDownIcon/>
+                                <Text>Escanear <b>Recuerdo</b></Text>
+                            </Flex>
+                        </Box>
+                    </Button>
+                </ContextMenu.Item>
+                <ContextMenu.Item style={{width:"100%"}}>
+                    <Button onClick={()=>setOpenInterface(true)}
+                        variant="ghost" asChild>
+                        <Box width="100%" p="2" px="4">
+                            <Flex width="100%" align="center" gap="1">
+                                <BrainIcon/><ArrowUpIcon/>
+                                <Text>Recordar <b>Recuerdo</b></Text>
+                            </Flex>
+                        </Box>
+                    </Button>
+                </ContextMenu.Item>
+                <ContextMenu.Separator />
+                <ContextMenu.Item>
+                    <Box width="100%" asChild>
+                        <Button onClick={()=>setDelDialogOpen(true)}
+                            variant="outline" color="red"><Trash2Icon/>
+                            Borrar </Button>
+                    </Box>
+                </ContextMenu.Item>
+            </Card>
         )
     }
-    const DDMenuItems = ()=>{
+    const ScanMemory = ()=>{
+        setOpenInterface(true);memory.date=new Date();
+        setDescription("Descripción Generada Automáticamente");
+        memory.lastMemory=new Date();
+        saveMemory();
+    }
+    const toggleEdit = ()=>{
+        setEdit(!edit);
+        if(edit){
+            setOpenDialog(true)
+        }
+    }
+    const DropdownMenuItems = ()=>{
         return(
             <Card>
-	            <DropdownMenu.Item onClick={()=>{
-                        setEdit(!edit);
-                        if(edit){
-                            setOpenDialog(true)
-                        }
-                    }}>
-                    {edit?"Save Memory":"Edit"}
-                    <PencilIcon size="16"/>
+	            <DropdownMenu.Item style={{width:"100%"}}>
+                    <Button onClick={()=>toggleEdit()}
+                        variant="ghost" asChild>
+                        <Box width="100%" p="2" px="4">
+                            <Flex width="100%" align="center" gap="1">
+                                {edit?<SaveIcon/>:<PencilIcon/>}
+                                <Text>{edit?"Guardar Memoria":"Edit"}</Text>
+                            </Flex>
+                        </Box>
+                    </Button>
                 </DropdownMenu.Item>
-	            <DropdownMenu.Item onClick={()=>{
-                    setOpenInterface(true);memory.date=new Date();
-                    setDescription("Descripción Por defecto");
-                    saveMemory();
-                }}>Scan Memory <BrainIcon size="16"/><ArrowDownIcon size="16"/></DropdownMenu.Item>
-	            <DropdownMenu.Item onClick={()=>setOpenInterface(true)}>Remember Memory <BrainIcon size="16"/><ArrowUpIcon size="16"/></DropdownMenu.Item>
+	            <DropdownMenu.Item style={{width:"100%"}}>
+                    <Button onClick={()=>ScanMemory()}
+                        variant="ghost" asChild>
+                        <Box width="100%" p="2" px="4">
+                            <Flex width="100%" align="center" gap="1">
+                                <BrainIcon/><ArrowDownIcon/>
+                                <Text>Escanear <b>Recuerdo</b></Text>
+                            </Flex>
+                        </Box>
+                    </Button>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item style={{width:"100%"}}>
+                    <Button onClick={()=>setOpenInterface(true)}
+                        variant="ghost" asChild>
+                        <Box width="100%" p="2" px="4">
+                            <Flex width="100%" align="center" gap="1">
+                                <BrainIcon/><ArrowUpIcon/>
+                                <Text>Recordar <b>Recuerdo</b></Text>
+                            </Flex>
+                        </Box>
+                    </Button>
+                </DropdownMenu.Item>
                 <DropdownMenu.Separator />
-	            <DropdownMenu.Item color="red" onClick={()=>{setDelDialogOpen(true)}}>
-	            	Delete
-	            </DropdownMenu.Item>
+                <DropdownMenu.Item>
+                    <Box width="100%" asChild>
+                        <Button onClick={()=>setDelDialogOpen(true)}
+                            variant="outline" color="red"><Trash2Icon/>
+                            Borrar </Button>
+                    </Box>
+                </DropdownMenu.Item>
             </Card>
         )
     }
@@ -71,6 +136,11 @@ export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem}
     var actualDate = new Date(memory.date)
     var dateString = actualDate.getDate()+"/"+actualDate.getMonth()+"/"+actualDate.getFullYear()
 
+    var memoryDateString: string | undefined = undefined
+    if(memory.lastMemory){
+        const auxDate = new Date(memory.lastMemory)
+        memoryDateString = auxDate.getDate()+"/"+auxDate.getMonth()+"/"+auxDate.getFullYear()
+    }
     return(
         <ContextMenu.Root>
         <ContextMenu.Trigger>
@@ -83,9 +153,58 @@ export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem}
                     </Flex>
                 </Box>
                 <Separator size="4"/>
-                <Box height="80%" asChild>
-                    <TextArea disabled={!edit} value={description} onChange={(e)=>{setDescription(e.target.value)}}></TextArea>
-                </Box>
+                <Flex height="80%" width="100%" gap="8">
+                    <Box height="100%" width="100%">
+                        <Text>Descipción</Text>
+                        <Box height="100%" width="100%" asChild>
+                            <TextArea disabled={!edit} value={description}
+                                onChange={(e)=>{setDescription(e.target.value)}}/>
+                        </Box>
+                    </Box>
+
+                    <Box height="100%" width="100%">
+                        <Text>Estado:</Text>
+                        <Flex gap="4">
+                            <Card asChild>
+                                <Box width="400px" height="200px">
+                                { !memoryDateString ?
+                                <>
+                                    <Text size="5" weight="medium" color="red">Memoria sin Recuerdo</Text>
+                                    <br/>
+                                    <br/>
+                                    <Text> Por favor <b>Carge</b> algún <b>Recuerdo</b> con el botón de la derecha</Text>
+                                </>
+                                :
+                                <>
+                                    <Text size="5" weight="medium" color="green">Recuerdo almacenado</Text>
+                                    <br/>
+                                    <Text size="2" color="gray">{memoryDateString}</Text>
+                                    <br/>
+                                    <Text> Para </Text>
+                                    <Text color="red" weight="bold"> <u>SOBRE-ESCRIBIR</u></Text>
+                                    <Text> pulse el botón de su derecha</Text>
+                                </>
+
+                                }
+                                </Box>
+                            </Card>
+                            <Button size="4" color={!memoryDateString ?undefined:"red"}
+                            onClick={()=>ScanMemory()}    variant="soft">
+                                {   !memoryDateString ?
+                                    <Flex width="100%" align="center" gap="1">
+                                        <BrainIcon/><ArrowDownIcon/>
+                                        <Text>Escanear <b>Recuerdo</b></Text>
+                                    </Flex>
+                                    :
+                                    <Flex width="100%" align="center" gap="1">
+                                        <Trash2Icon/><ArrowDownIcon/>
+                                        <Text weight="bold">Sobreescribir Recuerdo</Text>
+                                    </Flex>
+                                }
+                            </Button>
+                        </Flex>
+                    </Box>
+                </Flex>
             </Flex>
         </ContextMenu.Trigger>
         <ConfirmationDialog actionString="Delete Folder" open={delDialogOpen} setOpen={setDelDialogOpen}
@@ -106,14 +225,12 @@ export const MemView:React.FC<MemViewDysplayProps> = ({memory, path, fileSystem}
 	            	</Button>
 	            </DropdownMenu.Trigger>
 	            <NativeDropdownMenu.Content >
-                    <DDMenuItems/>
+                    <DropdownMenuItems/>
 	            </NativeDropdownMenu.Content>
             </DropdownMenu.Root>
         </Box>
         <NativeContextMenu.Content>
-            <Card >
-                <CMOpenSpace/>
-            </Card>
+            <CMOpenSpace/>
 		</NativeContextMenu.Content>
 	    </ContextMenu.Root>
     )

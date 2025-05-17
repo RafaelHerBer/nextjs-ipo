@@ -5,7 +5,7 @@ import * as NativeDropdownMenu from "@radix-ui/react-dropdown-menu"
 import { ContextMenu } from "@radix-ui/themes"
 import { addFile, deleteFile, MemDocument, MemFile, MemFileSystem, MemFolder, MemMemory, saveFileSystem } from "@/utils/files"
 import { FileCard, FolderCard } from "../FileCards"
-import { BrainIcon, FileIcon, FolderIcon, Pencil } from "lucide-react"
+import { BrainIcon, FileIcon, FolderIcon, Pencil, Trash2Icon } from "lucide-react"
 import React from "react"
 import { ConfirmationDialog, FileCreationDialog } from "../UtilityDialog"
 import { FilesNavView } from "./FilesNavView"
@@ -36,21 +36,6 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
         )
     })
 
-    type CMFileProps = {
-        deleteFile: ()=>void
-        rename: ()=>void
-    }
-    const CMFile:React.FC<CMFileProps> = ({deleteFile,rename})=>{
-        return(
-        <Card>
-            <ContextMenu.Item onClick={()=>rename()}><Pencil/>Rename</ContextMenu.Item>
-            <ContextMenu.Separator />
-            <ContextMenu.Item onClick={()=>deleteFile()} color="red">
-                Delete + {folder.name}
-            </ContextMenu.Item>
-        </Card>
-        )
-    }
     var filesComponents = subFiles.map((subFile)=>{
         console.log("Subfiles",subFile.name)
         return (
@@ -85,41 +70,116 @@ export const FolderView:React.FC<FolderViewDysplayProps> = ({folder, path, fileS
                 </DropdownMenu.Trigger>
                 <NativeDropdownMenu.Content>
                 <Card>
-                    <DropdownMenu.Item onClick={()=>setFolderDialogOpen(true)}><FolderIcon/>New Folder</DropdownMenu.Item>
-                    <DropdownMenu.Item onClick={()=>setDocDialogOpen(true)}><FileIcon/>New Documento</DropdownMenu.Item>
-                    <DropdownMenu.Item onClick={()=>setMemDialogOpen(true)}><BrainIcon/>New Memoria</DropdownMenu.Item>
-                    
-                    <DropdownMenu.Item color="red" onClick={()=>setDelDialogOpen(true)}>
-                        Delete "{folder.name}"
+                    <Flex width="100%" direction="column" gap="3" align="start" p="1">
+                    <DropdownMenu.Item style={{width:"100%"}}>
+                        <Button onClick={()=>setFolderDialogOpen(true)}
+                            variant="ghost" asChild>
+                            <Box width="100%" p="2">
+                                <Flex width="100%">
+                                    <FolderIcon/>
+                                    <Text>Nueva Carpeta</Text>
+                                </Flex>
+                            </Box>
+                        </Button>
                     </DropdownMenu.Item>
+                    <DropdownMenu.Item style={{width:"100%"}}>
+                        <Button onClick={()=>setDocDialogOpen(true)}
+                            variant="ghost" asChild>
+                            <Box width="100%" p="2">
+                                <Flex width="100%">
+                                    <FileIcon/>
+                                    <Text>Nuevo Documento</Text>
+                                </Flex>
+                            </Box>
+                        </Button>
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item style={{width:"100%"}}>
+                        <Button onClick={()=>setMemDialogOpen(true)}
+                            variant="ghost" asChild>
+                            <Box width="100%" p="2">
+                                <Flex width="100%">
+                                    <BrainIcon/>
+                                    <Text>Nueva Memoria</Text>
+                                </Flex>
+                            </Box>
+                        </Button>
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Separator/>
+                    <DropdownMenu.Item>
+                        <Box width="100%" asChild>
+                            <Button onClick={()=>setDelDialogOpen(true)}
+                                variant="outline" color="red"><Trash2Icon/>
+                                Borrar "{folder.name}"</Button>
+                        </Box>
+                    </DropdownMenu.Item>
+                    </Flex>
                 </Card>
                 </NativeDropdownMenu.Content>
             </DropdownMenu.Root>
         )
     }
+    const ContextMenuItems = ()=>{
+        return(
+        <Card>
+            <Flex width="100%" direction="column" gap="3" align="start" p="1">
+                <ContextMenu.Item style={{width:"100%"}}>
+                    <Button onClick={()=>setFolderDialogOpen(true)}
+                        variant="ghost" asChild>
+                        <Box width="100%" p="2">
+                            <Flex width="100%">
+                                <FolderIcon/>
+                                <Text>Nueva Carpeta</Text>
+                            </Flex>
+                        </Box>
+                    </Button>
+                </ContextMenu.Item>
+                <ContextMenu.Item style={{width:"100%"}}>
+                    <Button onClick={()=>setDocDialogOpen(true)}
+                        variant="ghost" asChild>
+                        <Box width="100%" p="2">
+                            <Flex width="100%">
+                                <FileIcon/>
+                                <Text>Nuevo Documento</Text>
+                            </Flex>
+                        </Box>
+                    </Button>
+                </ContextMenu.Item>
+                <ContextMenu.Item style={{width:"100%"}}>
+                    <Button onClick={()=>setMemDialogOpen(true)}
+                        variant="ghost" asChild>
+                        <Box width="100%" p="2">
+                            <Flex width="100%">
+                                <BrainIcon/>
+                                <Text>Nueva Memoria</Text>
+                            </Flex>
+                        </Box>
+                    </Button>
+                </ContextMenu.Item>
+                <Separator size="4"/>
+                <ContextMenu.Item>
+                    <Box width="100%" asChild>
+                        <Button onClick={()=>setDelDialogOpen(true)}
+                            variant="outline" color="red"><Trash2Icon/>
+                            Borrar "{folder.name}"</Button>
+                    </Box>
+                </ContextMenu.Item>
+            </Flex>
+        </Card>
+        )
+    }
     return(
         <>
             <FilesNavView dataFiles={subFiles} folders={subFolders} fileSystem={fileSystem}
-            ContextMenuItems={
-                <Card>
-                    <ContextMenu.Item onClick={()=>setFolderDialogOpen(true)}><FolderIcon/>New Folder</ContextMenu.Item>
-                    <ContextMenu.Item onClick={()=>setDocDialogOpen(true)}><FileIcon/>New Documento</ContextMenu.Item>
-                    <ContextMenu.Item onClick={()=>setMemDialogOpen(true)}><BrainIcon/>New Memoria</ContextMenu.Item>
-                    <ContextMenu.Separator />
-                    <ContextMenu.Item color="red" onClick={()=>setDelDialogOpen(true)}>
-                        Delete "{folder.name}"
-                    </ContextMenu.Item>
-                </Card>
-            } DownRightButton={ <DropDownMenu/> }/>
-            <FileCreationDialog type="Folder"
+            ContextMenuItems={ContextMenuItems()} DownRightButton={ <DropDownMenu/> }/>
+            <FileCreationDialog type="folder" displayType="Carpeta"
                 open={folderDialogOpen} setOpen={setFolderDialogOpen} 
                 create={createFolder} parentFolder={folder}
             />
-            <FileCreationDialog type="Document"
+            <FileCreationDialog type="document" displayType="Documento"
                 open={docDialogOpen} setOpen={setDocDialogOpen} 
                 create={createDocument} parentFolder={folder}
             />
-            <FileCreationDialog type="Memory"
+            <FileCreationDialog type="memory" displayType="Memoria"
                 open={memDialogOpen} setOpen={setMemDialogOpen} 
                 create={createMemory} parentFolder={folder}
             />

@@ -39,26 +39,6 @@ const Page = ()=>{
             </Flex>
         )
     }
-    const NothingFound = ()=>{
-        return(
-            <Flex width="100%" direction="column" align="center">
-                <Text size="7" weight="medium" color="red"> No se encontraron resultados <br/><br/></Text>
-                
-                <Flex gap="9">
-                    <InferButton/>
-                    <Flex direction="column">
-                        <Text color="gray" align="center" as="p"> También puede buscar manualmente<br/><br/></Text>
-                        <Button variant="soft" size="4"
-                            onClick={()=>window.location.href = "/Mis Archivos"}>
-                            <FolderIcon/>
-                            Mis Archivos
-                        </Button>
-                    </Flex>
-                </Flex>
-
-            </Flex>
-        )
-    }
     const Search = ()=>{
         const searchParams = useSearchParams();
         // Get a single query parameter
@@ -115,7 +95,22 @@ const Page = ()=>{
         }
         if(dataFiles.length == 0 && folders.length == 0){
             return(
-                <NothingFound/>
+                <Flex width="100%" direction="column" align="center">
+                    <Text size="7" weight="medium" color="red"> No se encontraron resultados <br/><br/></Text>
+
+                    <Flex gap="9">
+                        <InferButton/>
+                        <Flex direction="column">
+                            <Text color="gray" align="center" as="p"> También puede buscar manualmente<br/><br/></Text>
+                            <Button variant="soft" size="4"
+                                onClick={()=>window.location.href = "/Mis Archivos"}>
+                                <FolderIcon/>
+                                Mis Archivos
+                            </Button>
+                        </Flex>
+                    </Flex>
+
+                </Flex>
             )
         }
         return(

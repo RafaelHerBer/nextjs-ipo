@@ -1,33 +1,39 @@
 import { MemFolder } from "@/utils/files"
-import { Button, Dialog, Flex, TextField, Text } from "@radix-ui/themes"
+import { Button, Dialog, Flex, TextField, Text, Box } from "@radix-ui/themes"
 import { TypeIcon } from "./TypeIcon"
 import React from "react"
 
 type FileCreationDialogProps = {
-    type: string
+    type: string, displayType: string,
     open: boolean,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
     create: (name:string, parentFolder:MemFolder)=>void,
     parentFolder: MemFolder,
 }
-export const FileCreationDialog:React.FC<FileCreationDialogProps> = ({type, open, setOpen,create,parentFolder})=>{
+export const FileCreationDialog:React.FC<FileCreationDialogProps> = ({type, open, setOpen,create,parentFolder,displayType})=>{
     
     const [fileName, setFileName] = React.useState("")	
     return (
     <Dialog.Root open={open}>	
         <Dialog.Content maxWidth="450px" onInteractOutside={()=>setOpen(false)}>
-            <Dialog.Title>Create {type} <TypeIcon type={type}/></Dialog.Title>
+            <Dialog.Title>
+                <Flex direction="row" align="center" justify="center" gap="4">
+                    <Text>Crear: {displayType}</Text>
+                    <TypeIcon type={type}/>
+                </Flex>
+            </Dialog.Title>
+            
             <Dialog.Description size="2" mb="4">
-                Choose a name for the file
+                Elige un nombre para el archivo
             </Dialog.Description>
         
             <Flex direction="column" gap="3">
                 <label>
                     <Text as="div" size="2" mb="1" weight="bold">
-                        Name
+                        Nombre
                     </Text>
                     <TextField.Root value={fileName} onChange={(e)=>{setFileName(e.target.value)}}
-                        defaultValue="Carpeta"
+                        placeholder="Nombre del archivo"
                     />
                     
                 </label>

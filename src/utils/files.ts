@@ -49,6 +49,7 @@ export class MemMemory implements MemDatafile{
 
     readonly type = "memory";
     description: string;
+    lastMemory: Date | undefined
     constructor (name:string, description: string){
         this.name = name
         this.description = description

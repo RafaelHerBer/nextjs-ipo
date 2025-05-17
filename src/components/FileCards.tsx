@@ -43,15 +43,15 @@ export const BaseFileCard:React.FC<BaseFileCardProps > = ({file,children})=>{
                <ContextMenu.Item >
                 <Box width="100%" asChild>
                     <Button onClick={()=>window.location.href=("/"+fullPath)} highContrast
-                    variant="outline" color="gray"><ArrowRight/>Open</Button>
+                        variant="outline" color="gray"><ArrowRight/>Open</Button>
                 </Box>
                 </ContextMenu.Item>
                 <ContextMenu.Separator/>
                 <ContextMenu.Item>
                     <Box width="100%" asChild>
                         <Button onClick={()=>setDelDialogOpen(true)}
-                        variant="outline" color="red"><Trash2Icon/>
-                        Delete "{file.name}"</Button>
+                            variant="outline" color="red"><Trash2Icon/>
+                            Delete "{file.name}"</Button>
                     </Box>
                 </ContextMenu.Item>
             </Card>

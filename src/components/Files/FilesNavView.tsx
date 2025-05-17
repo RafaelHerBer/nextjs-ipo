@@ -37,23 +37,6 @@ export const FilesNavView:React.FC<FilesNavViewDysplayProps> = ({dataFiles,folde
             <FileCard file={file} key={"fileCard."+file.id}/>
         )
     })
-    const [folderDialogOpen, setFolderDialogOpen] = React.useState(false)	
-    const [docDialogOpen, setDocDialogOpen] = React.useState(false)	
-    const [memDialogOpen, setMemDialogOpen] = React.useState(false)	
-    const [delDialogOpen, setDelDialogOpen] = React.useState(false)	
-
-    const createFolder = (name:string, parentFolder:MemFolder)=>{
-        let newFolder = new MemFolder(name);
-        addFile(newFolder, parentFolder, fileSystem);
-    }
-    const createDocument = (name:string, parentFolder:MemFolder)=>{
-        let newDoc = new MemDocument(name,"");
-        addFile(newDoc, parentFolder, fileSystem);
-    }
-    const createMemory = (name:string, parentFolder:MemFolder)=>{
-        let newMem = new MemMemory(name,"");
-        addFile(newMem, parentFolder, fileSystem);
-    }
     return(
         <ContextMenu.Root>
         <ContextMenu.Trigger>
