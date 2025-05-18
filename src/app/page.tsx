@@ -69,11 +69,11 @@ const Page = () => {
           <Flex direction="column" width="60%"gap="2" p="6">
             <CreateDocButton/>
             <CreateMemButton/>
-            <FileCreationDialog type="document"
+            <FileCreationDialog type="document" displayType="Documento"
                 open={docDialogOpen} setOpen={setDocDialogOpen} 
                 create={createDocument} parentFolder={fileSystem.rootFolder}
             />
-            <FileCreationDialog type="memory"
+            <FileCreationDialog type="memory" displayType="Memoria"
                 open={memDialogOpen} setOpen={setMemDialogOpen} 
                 create={createMemory} parentFolder={fileSystem.rootFolder}
             />
