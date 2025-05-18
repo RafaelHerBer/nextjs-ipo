@@ -124,7 +124,9 @@ const Page = ()=>{
 
     return (
       <Box width="100%" py="5" px="160px">
-        <Search/>
+        <Suspense>
+            <Search/>
+        </Suspense>
       </Box>
     )
 }
