@@ -40,9 +40,7 @@ export const TypeIcon:React.FC<TypeIconProps> = ({type}) => {
     switch(type){
         case "memory":
             return(
-                <Flex direction="column" justify="center" 
-                    style={{background:"red"}}
-                >
+                <Flex direction="column" justify="center">
                     <Brain />
                 </Flex>
             )
