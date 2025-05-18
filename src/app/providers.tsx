@@ -8,7 +8,10 @@ export interface ProvidersProps {
 }
 
 export const Providers = ({ children }: ProvidersProps) => (
-  <ThemeProvider attribute="class">
-    <Theme id="root" accentColor="orange" appearance="dark">{children}</Theme>
+  <ThemeProvider attribute="className">
+    <Theme id="root" accentColor="orange" hasBackground
+    appearance="dark" panelBackground="solid">
+      {children}
+      </Theme>
   </ThemeProvider>
 );

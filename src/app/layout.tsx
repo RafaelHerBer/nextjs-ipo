@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { inter } from "@/utils/fonts";
 import { Providers } from "./providers";
 
+import { Open_Sans } from "next/font/google"
 import "@radix-ui/themes/styles.css";
 
 import "@/styles/reset.css";
@@ -12,8 +13,13 @@ import { SideBar } from "@/components/Panels/SideBar";
 import { TopBar } from "@/components/Panels/TopBar";
 import { Box, Flex } from "@radix-ui/themes";
 
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  variable: "--font-opensans",
+})
+
 export const metadata: Metadata = {
-  title: "Next.js + Radix Themes + Tailwind CSS",
+  title: "Memorium",
 };
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html
@@ -21,22 +27,22 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
     className={clsx(inter.className, inter.variable)}
     suppressHydrationWarning
   >
-    <body className="relative h-full w-full rounded-[inherit] [&>*]:h-full" >
+    <body>
       <Providers>
         <Box left="80px" top="80px" 
-          width="calc(100% - 80px)" height="100%"
-          style={{background: "var(--gray-1)"}}
+          width="calc(100% - 80px)" height="calc(100% - 80px)"
+          //style={{background: "var(--gray-1)"}}
           position="absolute">
           {children}
-        </Box>
-        <Box height="100%" position="fixed">
-          <Flex height="100%" width="100%">
-            <SideBar/>
-          </Flex>
         </Box>
         <Box left="80px" width="calc(100% - 80px)" position="fixed">
           <Flex height="100%" width="100%">
             <TopBar/>
+          </Flex>
+        </Box>
+        <Box height="100%" position="fixed">
+          <Flex height="100%" width="100%">
+            <SideBar/>
           </Flex>
         </Box>
       </Providers>

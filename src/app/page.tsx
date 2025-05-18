@@ -44,7 +44,7 @@ const Page = () => {
   var recentFiles = [
     RecentFile("Carpeta por defecto","folder","/Mis Archivos/Carpeta por defecto"),
     RecentFile("Archivo por defecto","document","/Mis Archivos/Carpeta por defecto/Documento por defecto"),
-    RecentFile("Memoria por defecto","memory","/Mis Archivos/Carpeta por defecto/SubCarpeta por defecto/Memoria por defecto"),
+    RecentFile("Memoria por defecto","memory","/Mis Archivos/Carpeta por defecto/Subcarpeta por defecto/Memoria por defecto"),
   ]
   const [docDialogOpen, setDocDialogOpen] = React.useState(false)	
   const [memDialogOpen, setMemDialogOpen] = React.useState(false)	
@@ -69,11 +69,11 @@ const Page = () => {
           <Flex direction="column" width="60%"gap="2" p="6">
             <CreateDocButton/>
             <CreateMemButton/>
-            <FileCreationDialog type="document"
+            <FileCreationDialog type="document" displayType="Documento"
                 open={docDialogOpen} setOpen={setDocDialogOpen} 
                 create={createDocument} parentFolder={fileSystem.rootFolder}
             />
-            <FileCreationDialog type="memory"
+            <FileCreationDialog type="memory" displayType="Memoria"
                 open={memDialogOpen} setOpen={setMemDialogOpen} 
                 create={createMemory} parentFolder={fileSystem.rootFolder}
             />

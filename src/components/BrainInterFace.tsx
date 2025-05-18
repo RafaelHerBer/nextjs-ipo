@@ -1,4 +1,6 @@
+import { Button } from '@radix-ui/themes';
 import React, { useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import styled, { keyframes,css } from 'styled-components';
 
 const rainbow = keyframes`
@@ -22,7 +24,7 @@ type RainbowOverlayProps = {
   bottom: 0;
   pointer-events: none;
   border: 15px solid hsl(0, 100%, 50%); /* Initial color */
-  z-index: 9999;
+  z-index: 2147483647;
   opacity: ${props => props.$active ? 0.7 : 0};
   transition: opacity 0.3s ease;
   
@@ -33,12 +35,18 @@ type RainbowOverlayProps = {
 
 `;
 
+const RainbowPortal = ({ isActive }: { isActive: boolean }) => {
+  return ReactDOM.createPortal(
+    <RainbowOverlay $active={isActive} />,
+    document.body
+  );
+};
 
 type BrainInterfaceDialogProps = {
     isActive: boolean,
     setIsActive: React.Dispatch<React.SetStateAction<boolean>>,
 }
-const BrainInterface:React.FC<BrainInterfaceDialogProps> = ({ isActive, setIsActive }) => {
+export const BrainInterface:React.FC<BrainInterfaceDialogProps> = ({ isActive, setIsActive }) => {
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
@@ -56,7 +64,26 @@ const BrainInterface:React.FC<BrainInterfaceDialogProps> = ({ isActive, setIsAct
       };
     }, [isActive, setIsActive]);
   
-    return <RainbowOverlay $active={isActive} />;
+    return <RainbowPortal isActive={isActive} />;
 };
 
-export default BrainInterface;
+export const BrainInterfaceButton=({ children, buttonAction }: { children: React.ReactNode, buttonAction:()=>void})=>{
+  const [openInterface, setOpenInterface] = React.useState(false)
+        return (
+            <>
+              <BrainInterface isActive={openInterface} setIsActive={setOpenInterface}/>
+              <Button variant="soft" size="4" onClick={()=>{
+                  setOpenInterface(true)
+                  if(typeof window != "undefined"){
+                      setTimeout(() => {
+                        buttonAction()
+                      }, 5000); // 5000 milliseconds = 5 seconds
+                  }
+              }}>
+              {
+                children
+              }
+	          </Button>
+            </>
+        )
+    }
